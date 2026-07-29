@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AXIOM — AI Automation, Engineered for Enterprise</title>
+<title>Yeager — AI Automation, Engineered for Enterprise</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -55,7 +55,7 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* ============================================================
-   3. BACKGROUND LAYERS (grid + orbs + noise)
+   3. BACKGROUND LAYERS
    ============================================================ */
 .bg-grid {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
@@ -271,7 +271,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   font-size: 0.875rem; line-height: 1.6; color: var(--text-primary);
   min-height: 3rem;
 }
-.widget__answer::before { content: 'AXIOM'; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; color: var(--accent-purple); display: block; margin-bottom: 0.5rem; }
+.widget__answer::before { content: 'Yeager'; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; color: var(--accent-purple); display: block; margin-bottom: 0.5rem; }
 .widget__footer {
   padding: 0.875rem 1.5rem; border-top: 1px solid var(--glass-border);
   display: flex; align-items: center; justify-content: space-between;
@@ -375,7 +375,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 @media (max-width: 980px) { .expertise__grid { grid-template-columns: 1fr; } }
 
 /* ============================================================
-   13. ARCHITECTURE / HOW IT WORKS
+   13. ARCHITECTURE
    ============================================================ */
 .architecture { background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.02) 50%, transparent); }
 .arch__grid {
@@ -471,7 +471,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   14. SECURITY / TRUST
+   14. SECURITY
    ============================================================ */
 .security__grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
@@ -524,7 +524,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   15. METRICS SECTION
+   15. METRICS
    ============================================================ */
 .metrics { padding: 6rem 0; }
 .metrics__grid {
@@ -562,7 +562,74 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   16. CONTACT
+   16. FOUNDER SECTION
+   ============================================================ */
+.founder { padding: 6rem 0; }
+.founder__card {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 3rem; align-items: center;
+  padding: 3rem; border-radius: 24px;
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(168, 85, 247, 0.05));
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 1000ms var(--ease-quiet), transform 1000ms var(--ease-quiet);
+}
+.founder__card.is-in { opacity: 1; transform: none; }
+.founder__card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-purple), transparent);
+}
+.founder__avatar {
+  width: 120px; height: 120px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif; font-size: 2.5rem; font-weight: 700; color: #050810;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.05), 0 0 40px rgba(0, 212, 255, 0.3);
+  position: relative;
+}
+.founder__avatar::after {
+  content: ''; position: absolute; inset: -8px; border-radius: 50%;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  animation: founder-ring 3s ease-in-out infinite;
+}
+@keyframes founder-ring {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 0.2; }
+}
+.founder__info { min-width: 0; }
+.founder__name { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+.founder__role { 
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.15em; 
+  text-transform: uppercase; color: var(--accent-blue); margin-bottom: 1rem;
+}
+.founder__bio { color: var(--text-secondary); font-size: 1rem; line-height: 1.65; max-width: 600px; }
+.founder__links { display: flex; flex-direction: column; gap: 0.75rem; flex-shrink: 0; }
+.founder__link {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.875rem 1.25rem; border-radius: 12px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.9375rem; font-weight: 500;
+  transition: all 250ms var(--ease-precise);
+  white-space: nowrap;
+}
+.founder__link:hover { background: rgba(0, 212, 255, 0.08); border-color: rgba(0, 212, 255, 0.3); transform: translateX(4px); box-shadow: 0 0 24px rgba(0, 212, 255, 0.1); }
+.founder__link svg { width: 18px; height: 18px; flex-shrink: 0; }
+.founder__link-icon { 
+  width: 32px; height: 32px; border-radius: 8px; 
+  background: rgba(255,255,255,0.05); 
+  display: flex; align-items: center; justify-content: center; 
+}
+
+@media (max-width: 980px) {
+  .founder__card { grid-template-columns: 1fr; text-align: center; gap: 2rem; padding: 2rem; }
+  .founder__avatar { margin: 0 auto; }
+  .founder__links { width: 100%; }
+  .founder__link { justify-content: center; }
+}
+
+/* ============================================================
+   17. CONTACT
    ============================================================ */
 .contact { padding-bottom: 10rem; }
 .contact__container {
@@ -591,6 +658,8 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 .contact__detail-icon svg { width: 16px; height: 16px; }
 .contact__detail-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.125rem; }
 .contact__detail-value { color: var(--text-primary); }
+.contact__detail a { color: inherit; transition: color 200ms; }
+.contact__detail a:hover { color: var(--accent-blue); }
 
 .form { display: flex; flex-direction: column; gap: 1.25rem; }
 .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -633,7 +702,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   17. FOOTER
+   18. FOOTER
    ============================================================ */
 .footer {
   padding: 4rem 0 2rem; border-top: 1px solid var(--glass-border);
@@ -660,7 +729,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   18. FLOATING CHATBOT
+   19. FLOATING CHATBOT
    ============================================================ */
 .chatbot {
   position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
@@ -777,7 +846,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 /* ============================================================
-   19. UTILITIES
+   20. UTILITIES
    ============================================================ */
 .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1000ms var(--ease-quiet), transform 1000ms var(--ease-quiet); }
 .reveal.is-in { opacity: 1; transform: none; }
@@ -791,35 +860,28 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 </head>
 <body>
 
-<!-- ============================================================
-     BACKGROUND LAYERS
-     ============================================================ -->
+<!-- Background Layers -->
 <div class="bg-grid"></div>
 <div class="orb orb--blue"></div>
 <div class="orb orb--purple"></div>
 <div class="orb orb--emerald"></div>
 <div class="noise"></div>
 
-<!-- Scroll progress -->
 <div class="scroll-progress" id="scrollProgress"></div>
-
-<!-- Custom cursor -->
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="cursor-dot" id="cursorDot"></div>
 
-<!-- ============================================================
-     NAVIGATION
-     ============================================================ -->
+<!-- Navigation -->
 <header class="nav">
   <div class="nav__inner">
     <a href="#" class="nav__brand">
       <span class="nav__brand-mark"></span>
-      <span>AXIOM</span>
+      <span>Yeager</span>
     </a>
     <nav class="nav__links">
       <a href="#expertise">Expertise</a>
       <a href="#architecture">Architecture</a>
-      <a href="#security">Security</a>
+      <a href="#founder">Founder</a>
       <a href="#contact">Contact</a>
     </nav>
     <a href="#contact" class="nav__cta">
@@ -832,9 +894,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </header>
 
-<!-- ============================================================
-     HERO
-     ============================================================ -->
+<!-- Hero -->
 <section class="hero" id="hero">
   <div class="container">
     <div class="hero__grid">
@@ -844,15 +904,15 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
           Customer service that thinks in <em>milliseconds</em>.
         </h1>
         <p class="hero__sub lead">
-          We build RAG pipelines, context-aware chatbots, and autonomous AI agents that resolve customer queries against your own knowledge base — securely, traceably, and at the scale of your support load.
+          Yeager builds RAG pipelines, context-aware chatbots, and autonomous AI agents that resolve customer queries against your own knowledge base — securely, traceably, and at the scale of your support load.
         </p>
         <div class="hero__cta">
           <a href="#contact" class="btn btn--primary" data-cursor-hover>
             Book a Demo
             <svg class="btn__arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-          <a href="#architecture" class="btn btn--ghost" data-cursor-hover>
-            View Architecture
+          <a href="#founder" class="btn btn--ghost" data-cursor-hover>
+            Meet the Founder
           </a>
         </div>
 
@@ -922,9 +982,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     TRUST BAR
-     ============================================================ -->
+<!-- Trust Bar -->
 <section class="trust">
   <div class="container">
     <div class="trust__label">Trusted by teams shipping AI in production</div>
@@ -939,9 +997,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     CORE EXPERTISE
-     ============================================================ -->
+<!-- Core Expertise -->
 <section class="expertise" id="expertise">
   <div class="container">
     <div class="section-head">
@@ -1008,9 +1064,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     ARCHITECTURE
-     ============================================================ -->
+<!-- Architecture -->
 <section class="architecture" id="architecture">
   <div class="container">
     <div class="section-head">
@@ -1141,9 +1195,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     METRICS
-     ============================================================ -->
+<!-- Metrics -->
 <section class="metrics">
   <div class="container">
     <div class="metrics__grid">
@@ -1171,9 +1223,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     SECURITY
-     ============================================================ -->
+<!-- Security -->
 <section class="security" id="security">
   <div class="container">
     <div class="section-head">
@@ -1249,14 +1299,56 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 </section>
 
 <!-- ============================================================
-     CONTACT
+     FOUNDER SECTION (Vinod Kumar)
      ============================================================ -->
+<section class="founder" id="founder">
+  <div class="container container--narrow">
+    <div class="founder__card" id="founderCard">
+      <div class="founder__avatar">VK</div>
+      <div class="founder__info">
+        <div class="founder__role">Founder &amp; Lead Engineer</div>
+        <h2 class="founder__name">Vinod Kumar</h2>
+        <p class="founder__bio">
+          A BE Computer Science &amp; Engineering student building the next generation of enterprise AI. Vinod leads the architectural vision at Yeager — combining rigorous academic foundations with production-grade engineering to ship RAG pipelines and agentic workflows that solve real business problems.
+        </p>
+      </div>
+      <div class="founder__links">
+        <a href="https://www.linkedin.com/in/vinod-kumar-n-a7bb49340/" target="_blank" rel="noopener noreferrer" class="founder__link" data-cursor-hover>
+          <div class="founder__link-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          </div>
+          <span>Connect on LinkedIn</span>
+        </a>
+        <a href="https://github.com/an2743055-coder" target="_blank" rel="noopener noreferrer" class="founder__link" data-cursor-hover>
+          <div class="founder__link-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          </div>
+          <span>View GitHub Profile</span>
+        </a>
+        <a href="mailto:an2743055@gmail.com" class="founder__link" data-cursor-hover>
+          <div class="founder__link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span>an2743055@gmail.com</span>
+        </a>
+        <a href="tel:7092538888" class="founder__link" data-cursor-hover>
+          <div class="founder__link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span>+91 70925 38888</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
 <section class="contact" id="contact">
   <div class="container container--narrow">
     <div class="contact__container">
       <div class="contact__info">
         <div class="eyebrow">Book a Demo</div>
-        <h2 class="contact__title">See AXIOM on your data, in 30 minutes.</h2>
+        <h2 class="contact__title">See Yeager on your data, in 30 minutes.</h2>
         <p class="contact__desc">We'll wire up a RAG pipeline against a sample of your knowledge base, run live queries, and show you the retrieval trace end-to-end. No slideware.</p>
         <div class="contact__details">
           <div class="contact__detail">
@@ -1265,16 +1357,16 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
             </div>
             <div>
               <div class="contact__detail-label">Email</div>
-              <div class="contact__detail-value">hello@axiom.ai</div>
+              <div class="contact__detail-value"><a href="mailto:an2743055@gmail.com">an2743055@gmail.com</a></div>
             </div>
           </div>
           <div class="contact__detail">
             <div class="contact__detail-icon">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4l5 4 5-4M3 4v8h10V4" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 11.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 .11 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L4.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 14 11.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div>
-              <div class="contact__detail-label">Response time</div>
-              <div class="contact__detail-value">Within 4 business hours</div>
+              <div class="contact__detail-label">Phone / WhatsApp</div>
+              <div class="contact__detail-value"><a href="tel:7092538888">+91 70925 38888</a></div>
             </div>
           </div>
           <div class="contact__detail">
@@ -1283,7 +1375,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
             </div>
             <div>
               <div class="contact__detail-label">Availability</div>
-              <div class="contact__detail-value">Mon–Fri · 9am–6pm PT</div>
+              <div class="contact__detail-value">Mon–Sat · 9am–8pm IST</div>
             </div>
           </div>
         </div>
@@ -1332,16 +1424,14 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
+<!-- Footer -->
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
       <div>
         <div class="footer__brand">
           <span class="nav__brand-mark"></span>
-          AXIOM
+          Yeager
         </div>
         <p class="footer__tagline">AI automation, engineered for enterprise. We build the RAG pipelines, chatbots, and agentic workflows that resolve your customer queries — securely, traceably, at scale.</p>
       </div>
@@ -1357,32 +1447,30 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
       <div class="footer__col">
         <div class="footer__col-title">Company</div>
         <ul>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Engineering</a></li>
-          <li><a href="#">Careers</a></li>
+          <li><a href="#founder">Founder</a></li>
+          <li><a href="https://github.com/an2743055-coder" target="_blank">Engineering</a></li>
+          <li><a href="https://www.linkedin.com/in/vinod-kumar-n-a7bb49340/" target="_blank">LinkedIn</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
       <div class="footer__col">
         <div class="footer__col-title">Resources</div>
         <ul>
-          <li><a href="#">Documentation</a></li>
-          <li><a href="#">Security</a></li>
-          <li><a href="#">Compliance</a></li>
-          <li><a href="#">Status</a></li>
+          <li><a href="mailto:an2743055@gmail.com">Email Support</a></li>
+          <li><a href="tel:7092538888">Phone Support</a></li>
+          <li><a href="#security">Security</a></li>
+          <li><a href="#security">Compliance</a></li>
         </ul>
       </div>
     </div>
     <div class="footer__bottom">
-      <div>© 2025 AXIOM AI Systems, Inc.</div>
-      <div>San Francisco · New York · London</div>
+      <div>© 2025 Yeager AI Systems · Founded by Vinod Kumar</div>
+      <div>Built with engineering rigor</div>
     </div>
   </div>
 </footer>
 
-<!-- ============================================================
-     FLOATING CHATBOT
-     ============================================================ -->
+<!-- Floating Chatbot -->
 <div class="chatbot" id="chatbot">
   <button class="chatbot__fab" id="chatbotFab" aria-label="Open chat" data-cursor-hover>
     <div class="chatbot__fab-pulse"></div>
@@ -1396,7 +1484,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
       <div class="chatbot__header-info">
         <div class="chatbot__avatar"></div>
         <div>
-          <div class="chatbot__name">AXIOM Assistant</div>
+          <div class="chatbot__name">Yeager Assistant</div>
           <div class="chatbot__status">Online · typically replies instantly</div>
         </div>
       </div>
@@ -1409,7 +1497,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
       <div class="chatbot__msg chatbot__msg--bot">
         <div class="chatbot__msg-avatar"></div>
         <div class="chatbot__msg-bubble">
-          Hi — I'm AXIOM's assistant. I can answer questions about our RAG pipelines, deployment options, or how we'd architect a solution for your team. What would you like to know?
+          Hi — I'm Yeager's assistant. I can answer questions about our RAG pipelines, deployment options, or how we'd architect a solution for your team. What would you like to know?
         </div>
       </div>
     </div>
@@ -1420,15 +1508,13 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
         <button class="chatbot__quick-btn" data-query="rag">How does RAG work?</button>
         <button class="chatbot__quick-btn" data-query="security">Data security?</button>
         <button class="chatbot__quick-btn" data-query="timeline">Deployment timeline?</button>
-        <button class="chatbot__quick-btn" data-query="pricing">Pricing model?</button>
+        <button class="chatbot__quick-btn" data-query="founder">Who is the founder?</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ============================================================
-     SCRIPTS
-     ============================================================ -->
+<!-- Scripts -->
 <script>
 (function() {
   'use strict';
@@ -1436,9 +1522,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
-  // ============================================================
-  // SCROLL PROGRESS
-  // ============================================================
+  // Scroll Progress
   const scrollProgress = document.getElementById('scrollProgress');
   function updateScrollProgress() {
     const scrollTop = window.scrollY;
@@ -1449,9 +1533,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   window.addEventListener('scroll', updateScrollProgress, { passive: true });
   updateScrollProgress();
 
-  // ============================================================
-  // CUSTOM CURSOR
-  // ============================================================
+  // Custom Cursor
   if (!isCoarsePointer) {
     const cursorDot = document.getElementById('cursorDot');
     const cursorRing = document.getElementById('cursorRing');
@@ -1477,9 +1559,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   }
 
-  // ============================================================
-  // INTERSECTION OBSERVER (reveal animations)
-  // ============================================================
+  // Intersection Observer
   const observerOptions = { rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -1490,34 +1570,24 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   }, observerOptions);
 
-  // Hero fires immediately
   const hero = document.getElementById('hero');
   if (hero) {
     requestAnimationFrame(() => hero.classList.add('is-in'));
   }
 
-  // Section heads
   document.querySelectorAll('.section-head').forEach(el => revealObserver.observe(el));
-
-  // Expertise cards
   document.querySelectorAll('.expertise__card').forEach(el => revealObserver.observe(el));
-
-  // Architecture steps
   document.querySelectorAll('.arch__step').forEach(el => revealObserver.observe(el));
-
-  // Security features
   document.querySelectorAll('.security__feature').forEach(el => revealObserver.observe(el));
-
-  // Metrics
   document.querySelectorAll('.metrics__cell').forEach(el => revealObserver.observe(el));
+  
+  const founderCard = document.getElementById('founderCard');
+  if (founderCard) revealObserver.observe(founderCard);
 
-  // Contact
   const contactSection = document.getElementById('contact');
   if (contactSection) revealObserver.observe(contactSection);
 
-  // ============================================================
-  // HERO WIDGET — Live RAG retrieval loop
-  // ============================================================
+  // Hero Widget Demo Loop
   const widgetQuery = document.getElementById('widgetQuery');
   const widgetAnswer = document.getElementById('widgetAnswer');
   const widgetChunks = document.querySelectorAll('.widget__chunk');
@@ -1569,7 +1639,6 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     const demo = demoQueries[demoIndex];
     demoIndex = (demoIndex + 1) % demoQueries.length;
 
-    // Reset
     widgetChunks.forEach(c => c.classList.remove('is-in'));
     widgetAnswer.textContent = '';
     widgetStatus.textContent = 'Searching...';
@@ -1577,20 +1646,14 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     widgetLatency.textContent = '—';
     widgetTokens.textContent = '—';
 
-    // Type query
     typeText(widgetQuery, demo.query, 35, () => {
       widgetStatus.textContent = 'Retrieving chunks...';
-      
-      // Reveal chunks
       widgetChunks.forEach((chunk, i) => {
         setTimeout(() => chunk.classList.add('is-in'), i * 200);
       });
-
-      // Generate answer
       setTimeout(() => {
         widgetStatus.textContent = 'Generating response...';
         widgetStatus.style.color = 'var(--accent-purple)';
-        
         setTimeout(() => {
           typeText(widgetAnswer, demo.answer, 18, () => {
             widgetStatus.textContent = 'Resolved';
@@ -1603,7 +1666,6 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   }
 
-  // Start demo cycle after a delay
   setTimeout(() => {
     runDemoCycle();
     if (!prefersReducedMotion) {
@@ -1611,9 +1673,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     }
   }, 2200);
 
-  // ============================================================
-  // CHATBOT WIDGET
-  // ============================================================
+  // Floating Chatbot
   const chatbotFab = document.getElementById('chatbotFab');
   const chatbotWindow = document.getElementById('chatbotWindow');
   const chatbotClose = document.getElementById('chatbotClose');
@@ -1621,23 +1681,21 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   const chatbotQuick = document.getElementById('chatbotQuick');
 
   const chatResponses = {
-    rag: "Our RAG pipelines use hybrid retrieval — combining dense vector search with BM25 keyword matching — then rerank the top-K chunks with a cross-encoder. Every response is grounded in citable sources from your knowledge base, with zero hallucinated citations across 12M+ queries shipped.\n\nWe support Confluence, Notion, Slack, PDFs, help centers, and custom APIs as source connectors, ingesting on a configurable sync schedule.",
-    security: "Security is built into the foundation, not bolted on:\n\n• AES-256 at rest, TLS 1.3 in transit\n• Per-tenant encryption keys, rotated every 90 days\n• Zero data retention — we never train on your data\n• SOC 2 Type II, GDPR, HIPAA, CCPA aligned\n• Full audit logs exportable to your SIEM\n• Deployable in your VPC, on-prem, or in our managed cloud\n\nYour data stays in your perimeter. We can ship the entire stack to your infrastructure if that's a requirement.",
-    timeline: "Typical deployment timeline:\n\nWeek 1 — Discovery & data audit. We map your knowledge sources and identify gaps.\nWeek 2 — Pipeline build. RAG ingestion, vector indexing, retrieval tuning on your data.\nWeek 3 — Bot integration. Connect to your support channels (Slack, Teams, web, Zendesk).\nWeek 4 — Pilot launch with a subset of traffic, monitoring accuracy and latency.\nWeek 5+ — Rollout to full volume with ongoing optimization.\n\nFor enterprise, we can have a working demo on your data within the first week.",
-    pricing: "Pricing scales with query volume and deployment model:\n\n• Managed cloud — per-query pricing, starting at $0.04/resolved ticket\n• Dedicated VPC — flat monthly + usage, starting at $8k/mo\n• On-premise — annual license, custom quote\n\nEvery plan includes the full stack: RAG pipeline, chatbot, agentic workflows, dashboard, and audit logs. We're happy to scope a quote once we understand your volume and use case — want to book a 30-minute demo?"
+    rag: "Our RAG pipelines use hybrid retrieval — combining dense vector search with BM25 keyword matching — then rerank the top-K chunks with a cross-encoder. Every response is grounded in citable sources from your knowledge base, with zero hallucinated citations across 12M+ queries shipped.\n\nWe support Confluence, Notion, Slack, PDFs, help centers, and custom APIs as source connectors.",
+    security: "Security is built into the foundation:\n\n• AES-256 at rest, TLS 1.3 in transit\n• Zero data retention — we never train on your data\n• Full audit logs exportable to your SIEM\n• Deployable in your VPC, on-prem, or managed cloud\n\nYour data stays in your perimeter.",
+    timeline: "Typical deployment timeline:\n\nWeek 1 — Discovery & data audit\nWeek 2 — Pipeline build & vector indexing\nWeek 3 — Bot integration to your channels\nWeek 4 — Pilot launch with subset of traffic\nWeek 5+ — Full rollout with optimization\n\nFor enterprise, we can have a working demo on your data within the first week.",
+    founder: "Yeager was founded by Vinod Kumar, a BE Computer Science & Engineering student. He leads the architectural vision, combining academic foundations with production engineering. You can connect with him directly on LinkedIn or explore his code on GitHub — just click the links in the Founder section above!",
+    pricing: "Pricing scales with query volume and deployment model:\n\n• Managed cloud — per-query, starting at $0.04/resolved ticket\n• Dedicated VPC — flat monthly + usage, from $8k/mo\n• On-premise — annual license, custom quote\n\nEvery plan includes the full stack. Want to book a 30-minute demo?"
   };
 
   function addMessage(text, sender) {
     const msg = document.createElement('div');
     msg.className = `chatbot__msg chatbot__msg--${sender}`;
-    
     const avatar = document.createElement('div');
     avatar.className = 'chatbot__msg-avatar';
-    
     const bubble = document.createElement('div');
     bubble.className = 'chatbot__msg-bubble';
     bubble.textContent = text;
-    
     msg.appendChild(avatar);
     msg.appendChild(bubble);
     chatbotBody.appendChild(msg);
@@ -1648,14 +1706,11 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     const msg = document.createElement('div');
     msg.className = 'chatbot__msg chatbot__msg--bot';
     msg.id = 'typing-indicator';
-    
     const avatar = document.createElement('div');
     avatar.className = 'chatbot__msg-avatar';
-    
     const bubble = document.createElement('div');
     bubble.className = 'chatbot__msg-bubble';
     bubble.innerHTML = '<div class="chatbot__typing"><span></span><span></span><span></span></div>';
-    
     msg.appendChild(avatar);
     msg.appendChild(bubble);
     chatbotBody.appendChild(msg);
@@ -1668,27 +1723,13 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   }
 
   function handleQuickQuery(queryKey, queryText) {
-    // Add user message
     addMessage(queryText, 'user');
-    
-    // Hide quick buttons after first interaction
     chatbotQuick.style.display = 'none';
-    
-    // Show typing
     setTimeout(() => addTyping(), 300);
-    
-    // Bot response
     setTimeout(() => {
       removeTyping();
-      const response = chatResponses[queryKey] || "I'd be happy to help with that. Could you provide a bit more detail, or would you like to book a demo with our team?";
-      // Split by double newline for paragraph breaks
-      const paragraphs = response.split('\n\n');
-      let fullText = '';
-      paragraphs.forEach((p, i) => {
-        if (i > 0) fullText += '\n\n';
-        fullText += p;
-      });
-      addMessage(fullText, 'bot');
+      const response = chatResponses[queryKey] || "I'd be happy to help with that. Could you provide a bit more detail, or would you like to book a demo with Vinod?";
+      addMessage(response, 'bot');
     }, 1400);
   }
 
@@ -1710,54 +1751,30 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   });
 
-  // Auto-open chatbot after 8 seconds (once)
-  let autoOpened = false;
-  function maybeAutoOpen() {
-    if (autoOpened) return;
-    if (document.hidden) return;
-    const scrolled = window.scrollY;
-    if (scrolled > 600 && !chatbotWindow.classList.contains('is-open') && chatbotFab.classList.contains('is-hidden') === false) {
-      // Don't auto-open, just pulse — let the user decide
-      autoOpened = true;
-    }
-  }
-  window.addEventListener('scroll', maybeAutoOpen, { passive: true });
-
-  // ============================================================
-  // CONTACT FORM
-  // ============================================================
+  // Contact Form
   const contactForm = document.getElementById('contactForm');
   const formSuccess = document.getElementById('formSuccess');
 
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    // Basic validation
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const company = document.getElementById('company').value.trim();
     
     if (!name || !email || !company) {
-      // Highlight missing fields
       if (!name) document.getElementById('name').style.borderColor = 'rgba(255, 100, 100, 0.4)';
       if (!email) document.getElementById('email').style.borderColor = 'rgba(255, 100, 100, 0.4)';
       if (!company) document.getElementById('company').style.borderColor = 'rgba(255, 100, 100, 0.4)';
       return;
     }
     
-    // Show success message
     formSuccess.classList.add('is-visible');
-    
-    // Reset form
     contactForm.reset();
-    
-    // Hide success after 5 seconds
     setTimeout(() => {
       formSuccess.classList.remove('is-visible');
     }, 6000);
   });
 
-  // Clear error styling on input
   ['name', 'email', 'company'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -1767,9 +1784,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     }
   });
 
-  // ============================================================
-  // SMOOTH SCROLL FOR ANCHOR LINKS
-  // ============================================================
+  // Smooth Scroll
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const targetId = this.getAttribute('href');
@@ -1784,9 +1799,6 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   });
 
-  // ============================================================
-  // PAUSE ANIMATIONS WHEN TAB HIDDEN
-  // ============================================================
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       document.body.classList.add('tab-hidden');
