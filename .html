@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIOM — AI Automation, Engineered for Enterprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   1. RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #060810;
+  color: #e8ecf4;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea, select { font-family: inherit; }
+::selection { background: rgba(0, 212, 255, 0.3); color: #fff; }
+
+/* ============================================================
+   2. CSS VARIABLES
+   ============================================================ */
+:root {
+  --bg-base: #060810;
+  --bg-surface: #0a0e1a;
+  --bg-elevated: #0f1422;
+  --text-primary: #e8ecf4;
+  --text-secondary: #8b94a7;
+  --text-tertiary: #5a6378;
+  --accent-blue: #00d4ff;
+  --accent-purple: #a855f7;
+  --accent-emerald: #10d9a0;
+  --glass-bg: rgba(255, 255, 255, 0.025);
+  --glass-bg-strong: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-strong: rgba(255, 255, 255, 0.14);
+  --glass-blur: blur(20px) saturate(180%);
+  --ease-quiet: cubic-bezier(.22, 1, .36, 1);
+  --ease-precise: cubic-bezier(.4, 0, .2, 1);
+  --ease-emphasis: cubic-bezier(.16, 1, .3, 1);
+  --container: 1400px;
+  --container-narrow: 980px;
+}
+
+/* ============================================================
+   3. BACKGROUND LAYERS (grid + orbs + noise)
+   ============================================================ */
+.bg-grid {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+.orb {
+  position: fixed; border-radius: 50%; filter: blur(100px);
+  pointer-events: none; z-index: 0; opacity: 0.18;
+  animation: drift 24s ease-in-out infinite alternate;
+}
+.orb--blue { width: 600px; height: 600px; background: #00d4ff; top: -200px; right: -150px; }
+.orb--purple { width: 500px; height: 500px; background: #a855f7; top: 40%; left: -200px; animation-delay: -8s; }
+.orb--emerald { width: 450px; height: 450px; background: #10d9a0; bottom: -150px; right: 20%; animation-delay: -16s; opacity: 0.12; }
+@keyframes drift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(80px, -50px) scale(1.15); }
+}
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  opacity: 0.025; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
+}
+
+/* ============================================================
+   4. SCROLL PROGRESS + CURSOR
+   ============================================================ */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  z-index: 9999; box-shadow: 0 0 12px var(--accent-blue);
+  transition: width 80ms linear;
+}
+.cursor-dot, .cursor-ring {
+  position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
+  border-radius: 50%; transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+}
+.cursor-dot { width: 6px; height: 6px; background: var(--accent-blue); transition: transform 100ms var(--ease-precise); }
+.cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(0, 212, 255, 0.4); transition: transform 250ms var(--ease-quiet), width 250ms, height 250ms, border-color 250ms; }
+.cursor-ring.is-hover { width: 60px; height: 60px; border-color: rgba(168, 85, 247, 0.5); }
+@media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } body { cursor: auto; } }
+@media (pointer: fine) { body { cursor: none; } a, button, input, textarea, select { cursor: none; } }
+
+/* ============================================================
+   5. TYPOGRAPHY
+   ============================================================ */
+h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; line-height: 1.04; letter-spacing: -0.02em; }
+.h-display { font-size: clamp(3.25rem, 8vw, 7rem); font-weight: 700; line-height: 0.98; letter-spacing: -0.035em; }
+.h-section { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.03em; }
+.h-card { font-size: clamp(1.5rem, 2vw, 2rem); font-weight: 600; letter-spacing: -0.02em; }
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent-blue);
+  display: inline-flex; align-items: center; gap: 0.75rem;
+}
+.eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent-blue); display: inline-block; }
+.lead { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.65; color: var(--text-secondary); font-weight: 400; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* ============================================================
+   6. LAYOUT PRIMITIVES
+   ============================================================ */
+.container { max-width: var(--container); margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
+.container--narrow { max-width: var(--container-narrow); }
+section { padding: 8rem 0; position: relative; z-index: 2; }
+@media (max-width: 768px) { section { padding: 5rem 0; } .container { padding: 0 1.5rem; } }
+
+/* ============================================================
+   7. NAVIGATION
+   ============================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.25rem 0; transition: all 400ms var(--ease-quiet);
+}
+.nav__inner {
+  max-width: var(--container); margin: 0 auto; padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(10, 14, 26, 0.6); backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px; padding: 0.75rem 1.25rem 0.75rem 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+.nav__brand { display: flex; align-items: center; gap: 0.625rem; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.125rem; letter-spacing: -0.01em; }
+.nav__brand-mark {
+  width: 28px; height: 28px; border-radius: 8px; position: relative;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.4);
+}
+.nav__brand-mark::after { content: ''; position: absolute; inset: 5px; background: var(--bg-base); border-radius: 4px; }
+.nav__brand-mark::before { content: ''; position: absolute; inset: 9px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-radius: 2px; z-index: 1; }
+.nav__links { display: flex; gap: 2.25rem; align-items: center; }
+.nav__links a { font-size: 0.875rem; color: var(--text-secondary); font-weight: 500; transition: color 250ms var(--ease-precise); position: relative; }
+.nav__links a:hover { color: var(--text-primary); }
+.nav__cta {
+  padding: 0.625rem 1.25rem; border-radius: 100px;
+  background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--accent-blue); font-size: 0.875rem; font-weight: 500;
+  transition: all 250ms var(--ease-precise);
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.nav__cta:hover { background: rgba(0, 212, 255, 0.18); box-shadow: 0 0 24px rgba(0, 212, 255, 0.25); }
+.nav__menu-toggle { display: none; }
+@media (max-width: 880px) {
+  .nav__links { display: none; }
+  .nav__menu-toggle { display: block; width: 32px; height: 32px; }
+  .nav__inner { padding: 0.75rem 1rem 0.75rem 1.5rem; }
+}
+
+/* ============================================================
+   8. BUTTONS
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  padding: 1.125rem 1.875rem; border-radius: 100px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 500;
+  letter-spacing: -0.01em; transition: all 300ms var(--ease-quiet);
+  position: relative; overflow: hidden;
+}
+.btn--primary {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #0099cc 100%);
+  color: #050810; font-weight: 600;
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.3), 0 8px 32px rgba(0, 212, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.btn--primary:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.5), 0 12px 40px rgba(0, 212, 255, 0.4), inset 0 1px 0 rgba(255,255,255,0.3); }
+.btn--ghost {
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong); color: var(--text-primary);
+}
+.btn--ghost:hover { background: var(--glass-bg-strong); border-color: rgba(255,255,255,0.2); }
+.btn__arrow { width: 16px; height: 16px; transition: transform 300ms var(--ease-quiet); }
+.btn:hover .btn__arrow { transform: translateX(4px); }
+
+/* ============================================================
+   9. HERO
+   ============================================================ */
+.hero { padding: 12rem 0 6rem; position: relative; overflow: hidden; }
+.hero__grid {
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 5rem;
+  align-items: center;
+}
+.hero__content > * { opacity: 0; transform: translateY(40px); }
+.hero__eyebrow { transition: opacity 800ms var(--ease-quiet), transform 800ms var(--ease-quiet); transition-delay: 200ms; }
+.hero__title { margin: 1.75rem 0 1.5rem; transition: opacity 1200ms var(--ease-emphasis), transform 1200ms var(--ease-emphasis); transition-delay: 400ms; }
+.hero__title em { font-style: normal; background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; position: relative; }
+.hero__sub { max-width: 540px; transition: opacity 1000ms var(--ease-quiet), transform 1000ms var(--ease-quiet); transition-delay: 600ms; }
+.hero__cta { margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap; transition: opacity 900ms var(--ease-quiet), transform 900ms var(--ease-quiet); transition-delay: 800ms; }
+.hero.is-in .hero__content > * { opacity: 1; transform: none; }
+
+.hero__stats {
+  margin-top: 4rem; display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 800ms var(--ease-quiet) 1000ms, transform 800ms var(--ease-quiet) 1000ms;
+}
+.hero.is-in .hero__stats { opacity: 1; transform: none; }
+.hero__stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary); }
+.hero__stat-label { font-size: 0.8125rem; color: var(--text-tertiary); margin-top: 0.25rem; }
+
+/* Hero demo widget */
+.hero__widget { opacity: 0; transform: translateY(40px) scale(0.96); transition: opacity 1200ms var(--ease-emphasis) 600ms, transform 1200ms var(--ease-emphasis) 600ms; }
+.hero.is-in .hero__widget { opacity: 1; transform: none; }
+.widget {
+  position: relative; border-radius: 24px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+  overflow: hidden;
+}
+.widget::before {
+  content: ''; position: absolute; inset: -1px; border-radius: 24px; padding: 1px;
+  background: linear-gradient(135deg, rgba(0,212,255,0.4), transparent 40%, transparent 60%, rgba(168,85,247,0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  pointer-events: none;
+}
+.widget__header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.125rem 1.5rem; border-bottom: 1px solid var(--glass-border);
+}
+.widget__title { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; }
+.widget__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.widget__status { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--accent-emerald); }
+.widget__body { padding: 1.5rem; min-height: 420px; }
+.widget__query {
+  font-family: 'Space Grotesk', sans-serif; font-size: 1.125rem; font-weight: 500;
+  color: var(--text-primary); margin-bottom: 1.5rem; min-height: 2.5rem;
+}
+.widget__query::after { content: '|'; color: var(--accent-blue); animation: blink 1s steps(2) infinite; }
+.widget__query.is-done::after { display: none; }
+@keyframes blink { 50% { opacity: 0; } }
+.widget__section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.widget__chunks { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+.widget__chunk {
+  padding: 0.625rem 0.875rem; border-radius: 8px;
+  background: rgba(0, 212, 255, 0.04); border: 1px solid rgba(0, 212, 255, 0.12);
+  font-size: 0.8125rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.625rem;
+  opacity: 0; transform: translateX(-12px);
+  transition: opacity 400ms var(--ease-quiet), transform 400ms var(--ease-quiet);
+}
+.widget__chunk.is-in { opacity: 1; transform: none; }
+.widget__chunk-score { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-blue); padding: 0.125rem 0.375rem; background: rgba(0,212,255,0.08); border-radius: 4px; }
+.widget__answer {
+  padding: 1rem 1.125rem; border-radius: 12px;
+  background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.15);
+  font-size: 0.875rem; line-height: 1.6; color: var(--text-primary);
+  min-height: 3rem;
+}
+.widget__answer::before { content: 'AXIOM'; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.18em; color: var(--accent-purple); display: block; margin-bottom: 0.5rem; }
+.widget__footer {
+  padding: 0.875rem 1.5rem; border-top: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary);
+}
+.widget__footer-stat { display: flex; gap: 1rem; }
+.widget__footer-stat span { color: var(--accent-blue); }
+
+@media (max-width: 980px) {
+  .hero__grid { grid-template-columns: 1fr; gap: 3rem; }
+  .hero { padding: 10rem 0 5rem; }
+  .hero__stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .hero__stat-num { font-size: 1.5rem; }
+}
+
+/* ============================================================
+   10. TRUST BAR
+   ============================================================ */
+.trust { padding: 3rem 0; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+.trust__label {
+  text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 2rem;
+}
+.trust__logos { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 2rem; }
+.trust__logo {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.125rem;
+  color: var(--text-tertiary); letter-spacing: -0.01em; opacity: 0.6;
+  transition: opacity 300ms var(--ease-precise), color 300ms var(--ease-precise);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.trust__logo:hover { opacity: 1; color: var(--text-secondary); }
+.trust__logo-mark { width: 18px; height: 18px; border-radius: 4px; background: currentColor; opacity: 0.6; }
+
+/* ============================================================
+   11. SECTION HEADER
+   ============================================================ */
+.section-head { margin-bottom: 5rem; max-width: 760px; }
+.section-head__eyebrow { opacity: 0; transform: translateY(16px); transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet); }
+.section-head__title { margin: 1.5rem 0 1.5rem; opacity: 0; transform: translateY(40px); transition: opacity 1000ms var(--ease-emphasis) 150ms, transform 1000ms var(--ease-emphasis) 150ms; }
+.section-head__sub { opacity: 0; transform: translateY(30px); transition: opacity 900ms var(--ease-quiet) 300ms, transform 900ms var(--ease-quiet) 300ms; }
+.section-head.is-in > * { opacity: 1; transform: none; }
+
+/* ============================================================
+   12. EXPERTISE GRID
+   ============================================================ */
+.expertise__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+}
+.expertise__card {
+  position: relative; padding: 2.5rem 2rem; border-radius: 20px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
+  transition: transform 500ms var(--ease-quiet), border-color 500ms var(--ease-quiet), box-shadow 500ms var(--ease-quiet);
+  opacity: 0; transform: translateY(40px) scale(1.02);
+  overflow: hidden;
+}
+.expertise__card.is-in { opacity: 1; transform: none; transition-delay: calc(var(--row) * 150ms + var(--col) * 60ms); }
+.expertise__card:hover { transform: translateY(-6px); border-color: var(--glass-border-strong); }
+.expertise__card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+  opacity: 0; transition: opacity 500ms var(--ease-quiet);
+}
+.expertise__card:hover::before { opacity: 1; }
+.expertise__card[data-accent="blue"] { --card-accent: rgba(0, 212, 255, 0.5); }
+.expertise__card[data-accent="blue"]:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(0, 212, 255, 0.2), 0 0 40px rgba(0, 212, 255, 0.08), inset 0 1px 0 rgba(255,255,255,0.05); }
+.expertise__card[data-accent="purple"] { --card-accent: rgba(168, 85, 247, 0.5); }
+.expertise__card[data-accent="purple"]:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(168, 85, 247, 0.2), 0 0 40px rgba(168, 85, 247, 0.08), inset 0 1px 0 rgba(255,255,255,0.05); }
+.expertise__card[data-accent="emerald"] { --card-accent: rgba(16, 217, 160, 0.5); }
+.expertise__card[data-accent="emerald"]:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(16, 217, 160, 0.2), 0 0 40px rgba(16, 217, 160, 0.08), inset 0 1px 0 rgba(255,255,255,0.05); }
+
+.expertise__icon {
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border-strong);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 1.75rem;
+  position: relative;
+}
+.expertise__card[data-accent="blue"] .expertise__icon { color: var(--accent-blue); box-shadow: 0 0 24px rgba(0, 212, 255, 0.15); }
+.expertise__card[data-accent="purple"] .expertise__icon { color: var(--accent-purple); box-shadow: 0 0 24px rgba(168, 85, 247, 0.15); }
+.expertise__card[data-accent="emerald"] .expertise__icon { color: var(--accent-emerald); box-shadow: 0 0 24px rgba(16, 217, 160, 0.15); }
+.expertise__icon svg { width: 26px; height: 26px; }
+.expertise__num {
+  position: absolute; top: 1.5rem; right: 1.75rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary);
+  letter-spacing: 0.1em;
+}
+.expertise__title { font-size: 1.625rem; font-weight: 600; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+.expertise__desc { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.65; margin-bottom: 1.75rem; }
+.expertise__features { list-style: none; padding-top: 1.25rem; border-top: 1px solid var(--glass-border); }
+.expertise__features li {
+  font-size: 0.8125rem; color: var(--text-secondary); padding: 0.375rem 0;
+  display: flex; align-items: center; gap: 0.625rem;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.01em;
+}
+.expertise__features li::before { content: '→'; color: var(--card-accent); font-family: 'JetBrains Mono', monospace; }
+.expertise__card[data-accent="blue"] .expertise__features li::before { color: var(--accent-blue); }
+.expertise__card[data-accent="purple"] .expertise__features li::before { color: var(--accent-purple); }
+.expertise__card[data-accent="emerald"] .expertise__features li::before { color: var(--accent-emerald); }
+
+@media (max-width: 980px) { .expertise__grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   13. ARCHITECTURE / HOW IT WORKS
+   ============================================================ */
+.architecture { background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.02) 50%, transparent); }
+.arch__grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+}
+.arch__steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+.arch__steps::before {
+  content: ''; position: absolute; left: 32px; top: 32px; bottom: 32px; width: 1px;
+  background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple), var(--accent-emerald));
+  opacity: 0.3;
+}
+.arch__step {
+  display: grid; grid-template-columns: 64px 1fr; gap: 1.5rem; padding: 1.75rem 0;
+  position: relative; opacity: 0; transform: translateY(30px);
+  transition: opacity 800ms var(--ease-quiet), transform 800ms var(--ease-quiet);
+}
+.arch__step.is-in { opacity: 1; transform: none; }
+.arch__step.is-in:nth-child(1) { transition-delay: 0ms; }
+.arch__step.is-in:nth-child(2) { transition-delay: 150ms; }
+.arch__step.is-in:nth-child(3) { transition-delay: 300ms; }
+.arch__step.is-in:nth-child(4) { transition-delay: 450ms; }
+.arch__num {
+  width: 64px; height: 64px; border-radius: 16px;
+  background: var(--bg-elevated); border: 1px solid var(--glass-border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 600;
+  position: relative; z-index: 1;
+  backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+}
+.arch__step:nth-child(1) .arch__num { color: var(--accent-blue); box-shadow: 0 0 24px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.3); }
+.arch__step:nth-child(2) .arch__num { color: var(--accent-blue); box-shadow: 0 0 24px rgba(0, 212, 255, 0.2); border-color: rgba(0, 212, 255, 0.3); }
+.arch__step:nth-child(3) .arch__num { color: var(--accent-purple); box-shadow: 0 0 24px rgba(168, 85, 247, 0.2); border-color: rgba(168, 85, 247, 0.3); }
+.arch__step:nth-child(4) .arch__num { color: var(--accent-emerald); box-shadow: 0 0 24px rgba(16, 217, 160, 0.2); border-color: rgba(16, 217, 160, 0.3); }
+.arch__step-body { padding-top: 0.5rem; }
+.arch__step-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 0.5rem; }
+.arch__step-title { font-size: 1.375rem; font-weight: 600; margin-bottom: 0.625rem; letter-spacing: -0.015em; }
+.arch__step-desc { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6; }
+.arch__step-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.875rem; }
+.arch__tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 0.25rem 0.5rem;
+  border-radius: 4px; background: var(--glass-bg); border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.arch__visual {
+  position: relative; padding: 2rem; border-radius: 24px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  min-height: 540px;
+}
+.arch__visual-title { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.arch__visual-title span:last-child { color: var(--accent-emerald); }
+.arch__flow { display: flex; flex-direction: column; gap: 1rem; }
+.arch__node {
+  padding: 1rem 1.25rem; border-radius: 12px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  display: flex; align-items: center; gap: 1rem;
+  position: relative;
+}
+.arch__node-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.2);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-blue); flex-shrink: 0;
+}
+.arch__node:nth-child(2) .arch__node-icon { background: rgba(0, 212, 255, 0.08); border-color: rgba(0, 212, 255, 0.2); color: var(--accent-blue); }
+.arch__node:nth-child(3) .arch__node-icon { background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+.arch__node:nth-child(4) .arch__node-icon { background: rgba(16, 217, 160, 0.08); border-color: rgba(16, 217, 160, 0.2); color: var(--accent-emerald); }
+.arch__node-body { flex: 1; }
+.arch__node-title { font-size: 0.875rem; font-weight: 500; color: var(--text-primary); }
+.arch__node-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary); margin-top: 0.125rem; }
+.arch__node-status { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald); }
+.arch__connector { height: 24px; display: flex; align-items: center; justify-content: center; position: relative; }
+.arch__connector::before { content: ''; width: 1px; height: 100%; background: var(--glass-border-strong); }
+.arch__connector-dot {
+  position: absolute; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-blue);
+  box-shadow: 0 0 8px var(--accent-blue);
+  animation: travel 2.5s ease-in-out infinite;
+}
+@keyframes travel {
+  0% { top: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.arch__connector:nth-child(4) .arch__connector-dot { animation-delay: 0.6s; background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+.arch__connector:nth-child(6) .arch__connector-dot { animation-delay: 1.2s; background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+.arch__connector:nth-child(8) .arch__connector-dot { animation-delay: 1.8s; background: var(--accent-emerald); box-shadow: 0 0 8px var(--accent-emerald); }
+
+@media (max-width: 980px) {
+  .arch__grid { grid-template-columns: 1fr; gap: 3rem; }
+  .arch__visual { min-height: auto; }
+}
+
+/* ============================================================
+   14. SECURITY / TRUST
+   ============================================================ */
+.security__grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+  margin-top: 4rem;
+}
+.security__feature {
+  padding: 1.75rem; border-radius: 16px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  transition: all 400ms var(--ease-quiet);
+  opacity: 0; transform: translateY(30px);
+}
+.security__feature.is-in { opacity: 1; transform: none; transition: opacity 700ms var(--ease-quiet), transform 700ms var(--ease-quiet); transition-delay: calc(var(--idx) * 100ms); }
+.security__feature:hover { border-color: rgba(16, 217, 160, 0.3); background: var(--glass-bg-strong); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.3), 0 0 24px rgba(16, 217, 160, 0.05); }
+.security__icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  background: rgba(16, 217, 160, 0.08); border: 1px solid rgba(16, 217, 160, 0.2);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-emerald);
+  margin-bottom: 1.25rem;
+}
+.security__icon svg { width: 20px; height: 20px; }
+.security__title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.015em; }
+.security__desc { color: var(--text-secondary); font-size: 0.875rem; line-height: 1.6; }
+
+.security__banner {
+  margin-top: 4rem; padding: 2.5rem; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(16, 217, 160, 0.06), rgba(0, 212, 255, 0.04));
+  border: 1px solid rgba(16, 217, 160, 0.2);
+  display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+  position: relative; overflow: hidden;
+}
+.security__banner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-emerald), transparent);
+}
+.security__banner-title { font-size: 1.375rem; font-weight: 600; margin-bottom: 0.5rem; letter-spacing: -0.015em; }
+.security__banner-desc { color: var(--text-secondary); font-size: 0.9375rem; }
+.security__badges { display: flex; gap: 1rem; flex-wrap: wrap; }
+.security__badge {
+  padding: 0.625rem 1rem; border-radius: 8px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border-strong);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; letter-spacing: 0.05em;
+  color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;
+}
+.security__badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 6px var(--accent-emerald); }
+
+@media (max-width: 980px) {
+  .security__grid { grid-template-columns: 1fr; }
+  .security__banner { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   15. METRICS SECTION
+   ============================================================ */
+.metrics { padding: 6rem 0; }
+.metrics__grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem;
+}
+.metrics__cell {
+  padding: 2.5rem 2rem; border-radius: 20px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  text-align: left; position: relative; overflow: hidden;
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 800ms var(--ease-quiet), transform 800ms var(--ease-quiet);
+}
+.metrics__cell.is-in { opacity: 1; transform: none; transition-delay: calc(var(--idx) * 120ms); }
+.metrics__cell::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  opacity: 0.4;
+}
+.metrics__num {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 700;
+  letter-spacing: -0.03em; line-height: 1;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 0.75rem;
+}
+.metrics__label { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
+.metrics__sub { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary); margin-top: 0.5rem; letter-spacing: 0.05em; }
+
+@media (max-width: 980px) {
+  .metrics__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .metrics__grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   16. CONTACT
+   ============================================================ */
+.contact { padding-bottom: 10rem; }
+.contact__container {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 4rem; align-items: start;
+  padding: 3rem; border-radius: 32px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  position: relative; overflow: hidden;
+}
+.contact__container::before {
+  content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), var(--accent-purple), transparent);
+}
+.contact__info > * { opacity: 0; transform: translateY(20px); transition: opacity 700ms var(--ease-quiet), transform 700ms var(--ease-quiet); }
+.contact.is-in .contact__info > *:nth-child(1) { transition-delay: 100ms; }
+.contact.is-in .contact__info > *:nth-child(2) { transition-delay: 200ms; }
+.contact.is-in .contact__info > *:nth-child(3) { transition-delay: 300ms; }
+.contact.is-in .contact__info > *:nth-child(4) { transition-delay: 400ms; }
+.contact.is-in .contact__info > * { opacity: 1; transform: none; }
+.contact__title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; margin-bottom: 1.25rem; }
+.contact__desc { color: var(--text-secondary); font-size: 1rem; line-height: 1.65; margin-bottom: 2rem; }
+.contact__details { display: flex; flex-direction: column; gap: 1rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); }
+.contact__detail { display: flex; align-items: center; gap: 0.875rem; font-size: 0.9375rem; color: var(--text-secondary); }
+.contact__detail-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--glass-bg-strong); border: 1px solid var(--glass-border-strong); display: flex; align-items: center; justify-content: center; color: var(--accent-blue); flex-shrink: 0; }
+.contact__detail-icon svg { width: 16px; height: 16px; }
+.contact__detail-label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.125rem; }
+.contact__detail-value { color: var(--text-primary); }
+
+.form { display: flex; flex-direction: column; gap: 1.25rem; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form__group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form__label { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-tertiary); }
+.form__input, .form__select, .form__textarea {
+  padding: 0.875rem 1rem; border-radius: 10px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  color: var(--text-primary); font-size: 0.9375rem;
+  transition: border-color 250ms var(--ease-precise), box-shadow 250ms var(--ease-precise), background 250ms var(--ease-precise);
+  width: 100%;
+}
+.form__input:focus, .form__select:focus, .form__textarea:focus {
+  outline: none; border-color: rgba(0, 212, 255, 0.4); background: rgba(0, 212, 255, 0.03);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
+}
+.form__textarea { resize: vertical; min-height: 110px; font-family: inherit; }
+.form__select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%238b94a7' stroke-width='1.5' d='M1 1l5 5 5-5'/></svg>"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+.form__submit {
+  margin-top: 0.5rem; padding: 1.125rem 1.5rem; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #0099cc 100%);
+  color: #050810; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem;
+  letter-spacing: -0.01em; transition: all 300ms var(--ease-quiet);
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.3), 0 8px 24px rgba(0, 212, 255, 0.2);
+  display: flex; align-items: center; justify-content: center; gap: 0.625rem;
+}
+.form__submit:hover { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.5), 0 12px 32px rgba(0, 212, 255, 0.35); }
+.form__success {
+  padding: 1rem 1.25rem; border-radius: 10px;
+  background: rgba(16, 217, 160, 0.08); border: 1px solid rgba(16, 217, 160, 0.25);
+  color: var(--accent-emerald); font-size: 0.9375rem; display: none;
+  align-items: center; gap: 0.625rem;
+}
+.form__success.is-visible { display: flex; animation: fade-in 500ms var(--ease-quiet); }
+@keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 980px) {
+  .contact__container { grid-template-columns: 1fr; padding: 2rem; gap: 3rem; }
+  .form__row { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   17. FOOTER
+   ============================================================ */
+.footer {
+  padding: 4rem 0 2rem; border-top: 1px solid var(--glass-border);
+  position: relative; z-index: 2;
+}
+.footer__grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem;
+}
+.footer__brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.625rem; }
+.footer__tagline { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6; max-width: 320px; }
+.footer__col-title { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1.25rem; }
+.footer__col ul { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
+.footer__col a { color: var(--text-secondary); font-size: 0.9375rem; transition: color 250ms var(--ease-precise); }
+.footer__col a:hover { color: var(--accent-blue); }
+.footer__bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 2rem; border-top: 1px solid var(--glass-border);
+  font-size: 0.8125rem; color: var(--text-tertiary);
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em;
+}
+@media (max-width: 768px) {
+  .footer__grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .footer__bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+
+/* ============================================================
+   18. FLOATING CHATBOT
+   ============================================================ */
+.chatbot {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+  font-family: 'Inter', sans-serif;
+}
+.chatbot__fab {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 32px rgba(0, 212, 255, 0.3);
+  transition: transform 300ms var(--ease-quiet), box-shadow 300ms var(--ease-quiet);
+  position: relative;
+}
+.chatbot__fab:hover { transform: scale(1.05); box-shadow: 0 0 0 1px rgba(0, 212, 255, 0.5), 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 48px rgba(0, 212, 255, 0.5); }
+.chatbot__fab svg { width: 28px; height: 28px; color: #050810; }
+.chatbot__fab-pulse {
+  position: absolute; inset: 0; border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  animation: fab-pulse 2.5s ease-out infinite;
+}
+@keyframes fab-pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.chatbot__fab.is-hidden { display: none; }
+
+.chatbot__window {
+  position: absolute; bottom: 80px; right: 0;
+  width: 380px; max-width: calc(100vw - 2rem);
+  border-radius: 20px;
+  background: rgba(10, 14, 26, 0.85);
+  backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+  overflow: hidden;
+  opacity: 0; transform: translateY(20px) scale(0.96); pointer-events: none;
+  transition: opacity 350ms var(--ease-quiet), transform 350ms var(--ease-quiet);
+}
+.chatbot__window.is-open { opacity: 1; transform: none; pointer-events: auto; }
+.chatbot__header {
+  padding: 1.125rem 1.25rem; border-bottom: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.chatbot__header-info { display: flex; align-items: center; gap: 0.75rem; }
+.chatbot__avatar {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  display: flex; align-items: center; justify-content: center;
+  position: relative; box-shadow: 0 0 16px rgba(0, 212, 255, 0.3);
+}
+.chatbot__avatar::after { content: ''; position: absolute; inset: 4px; background: var(--bg-base); border-radius: 6px; }
+.chatbot__avatar::before { content: ''; position: absolute; inset: 8px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-radius: 3px; z-index: 1; }
+.chatbot__name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.9375rem; }
+.chatbot__status { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--accent-emerald); display: flex; align-items: center; gap: 0.375rem; }
+.chatbot__status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-emerald); box-shadow: 0 0 6px var(--accent-emerald); }
+.chatbot__close { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: var(--text-tertiary); transition: all 200ms var(--ease-precise); }
+.chatbot__close:hover { background: var(--glass-bg-strong); color: var(--text-primary); }
+.chatbot__close svg { width: 14px; height: 14px; }
+
+.chatbot__body {
+  padding: 1.25rem; height: 380px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 0.875rem;
+}
+.chatbot__body::-webkit-scrollbar { width: 4px; }
+.chatbot__body::-webkit-scrollbar-track { background: transparent; }
+.chatbot__body::-webkit-scrollbar-thumb { background: var(--glass-border-strong); border-radius: 4px; }
+
+.chatbot__msg { display: flex; gap: 0.625rem; max-width: 85%; }
+.chatbot__msg--bot { align-self: flex-start; }
+.chatbot__msg--user { align-self: flex-end; flex-direction: row-reverse; }
+.chatbot__msg-avatar {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  position: relative;
+}
+.chatbot__msg-avatar::after { content: ''; position: absolute; inset: 4px; background: var(--bg-base); border-radius: 4px; }
+.chatbot__msg-avatar::before { content: ''; position: absolute; inset: 7px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); border-radius: 2px; z-index: 1; }
+.chatbot__msg--user .chatbot__msg-avatar { background: var(--glass-bg-strong); }
+.chatbot__msg--user .chatbot__msg-avatar::after, .chatbot__msg--user .chatbot__msg-avatar::before { display: none; }
+.chatbot__msg-bubble {
+  padding: 0.625rem 0.875rem; border-radius: 12px;
+  font-size: 0.875rem; line-height: 1.55;
+}
+.chatbot__msg--bot .chatbot__msg-bubble {
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  color: var(--text-primary); border-top-left-radius: 4px;
+}
+.chatbot__msg--user .chatbot__msg-bubble {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.1));
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: var(--text-primary); border-top-right-radius: 4px;
+}
+.chatbot__typing { display: flex; gap: 4px; padding: 0.5rem 0; }
+.chatbot__typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--text-tertiary); animation: typing 1.4s ease-in-out infinite; }
+.chatbot__typing span:nth-child(2) { animation-delay: 0.2s; }
+.chatbot__typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
+
+.chatbot__quick { padding: 0.75rem 1.25rem; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 0.5rem; }
+.chatbot__quick-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-tertiary); }
+.chatbot__quick-buttons { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+.chatbot__quick-btn {
+  padding: 0.375rem 0.75rem; border-radius: 100px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  font-size: 0.75rem; color: var(--text-secondary);
+  transition: all 200ms var(--ease-precise);
+}
+.chatbot__quick-btn:hover { background: rgba(0, 212, 255, 0.08); border-color: rgba(0, 212, 255, 0.25); color: var(--accent-blue); }
+
+@media (max-width: 540px) {
+  .chatbot { bottom: 1rem; right: 1rem; }
+  .chatbot__window { width: calc(100vw - 2rem); }
+  .chatbot__fab { width: 56px; height: 56px; }
+}
+
+/* ============================================================
+   19. UTILITIES
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 1000ms var(--ease-quiet), transform 1000ms var(--ease-quiet); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  .orb { animation: none; }
+  .chatbot__fab-pulse { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     BACKGROUND LAYERS
+     ============================================================ -->
+<div class="bg-grid"></div>
+<div class="orb orb--blue"></div>
+<div class="orb orb--purple"></div>
+<div class="orb orb--emerald"></div>
+<div class="noise"></div>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Custom cursor -->
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<header class="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__brand">
+      <span class="nav__brand-mark"></span>
+      <span>AXIOM</span>
+    </a>
+    <nav class="nav__links">
+      <a href="#expertise">Expertise</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#security">Security</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a href="#contact" class="nav__cta">
+      Book a Demo
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8m0 0L6 2m4 4L6 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <button class="nav__menu-toggle" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero__grid">
+      <div class="hero__content">
+        <div class="hero__eyebrow eyebrow">AI Automation, Engineered</div>
+        <h1 class="hero__title h-display">
+          Customer service that thinks in <em>milliseconds</em>.
+        </h1>
+        <p class="hero__sub lead">
+          We build RAG pipelines, context-aware chatbots, and autonomous AI agents that resolve customer queries against your own knowledge base — securely, traceably, and at the scale of your support load.
+        </p>
+        <div class="hero__cta">
+          <a href="#contact" class="btn btn--primary" data-cursor-hover>
+            Book a Demo
+            <svg class="btn__arrow" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#architecture" class="btn btn--ghost" data-cursor-hover>
+            View Architecture
+          </a>
+        </div>
+
+        <div class="hero__stats">
+          <div>
+            <div class="hero__stat-num">94.2%</div>
+            <div class="hero__stat-label">Resolution accuracy</div>
+          </div>
+          <div>
+            <div class="hero__stat-num">1.8s</div>
+            <div class="hero__stat-label">Median response time</div>
+          </div>
+          <div>
+            <div class="hero__stat-num">12M+</div>
+            <div class="hero__stat-label">Queries resolved</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__widget">
+        <div class="widget">
+          <div class="widget__header">
+            <div class="widget__title">
+              <span class="widget__dot"></span>
+              <span>Live RAG Retrieval</span>
+            </div>
+            <div class="widget__status" id="widgetStatus">Ready</div>
+          </div>
+          <div class="widget__body">
+            <div class="widget__query" id="widgetQuery"></div>
+            
+            <div class="widget__section-label">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1"/><path d="M5 3v2l1.5 1.5" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+              Retrieved chunks · top 3
+            </div>
+            <div class="widget__chunks" id="widgetChunks">
+              <div class="widget__chunk">
+                <span class="widget__chunk-score">0.94</span>
+                <span>knowledge-base/billing/refund-policy.md · §3.2</span>
+              </div>
+              <div class="widget__chunk">
+                <span class="widget__chunk-score">0.89</span>
+                <span>knowledge-base/billing/escalation.md · §1.4</span>
+              </div>
+              <div class="widget__chunk">
+                <span class="widget__chunk-score">0.81</span>
+                <span>knowledge-base/faq/returns.md · §2.7</span>
+              </div>
+            </div>
+
+            <div class="widget__section-label">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Generated response
+            </div>
+            <div class="widget__answer" id="widgetAnswer"></div>
+          </div>
+          <div class="widget__footer">
+            <div class="widget__footer-stat">
+              <div>latency <span id="widgetLatency">—</span></div>
+              <div>tokens <span id="widgetTokens">—</span></div>
+            </div>
+            <div>model · gpt-4o · 128k</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRUST BAR
+     ============================================================ -->
+<section class="trust">
+  <div class="container">
+    <div class="trust__label">Trusted by teams shipping AI in production</div>
+    <div class="trust__logos">
+      <div class="trust__logo"><span class="trust__logo-mark"></span>Northwind</div>
+      <div class="trust__logo"><span class="trust__logo-mark" style="border-radius:50%"></span>Halcyon</div>
+      <div class="trust__logo"><span class="trust__logo-mark" style="transform:rotate(45deg)"></span>Meridian</div>
+      <div class="trust__logo"><span class="trust__logo-mark"></span>Cinder Labs</div>
+      <div class="trust__logo"><span class="trust__logo-mark" style="border-radius:50%"></span>Vantage</div>
+      <div class="trust__logo"><span class="trust__logo-mark"></span>Solace</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CORE EXPERTISE
+     ============================================================ -->
+<section class="expertise" id="expertise">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__eyebrow eyebrow">Core Expertise</div>
+      <h2 class="section-head__title h-section">Three pillars of intelligent automation.</h2>
+      <p class="section-head__sub lead">Each layer is built to stand alone — and engineered to compound when stacked. We meet you wherever your data lives and ship to wherever your customers are.</p>
+    </div>
+
+    <div class="expertise__grid">
+      <article class="expertise__card" data-accent="blue" style="--row:0; --col:0">
+        <div class="expertise__num">01 / 03</div>
+        <div class="expertise__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="6" rx="8" ry="3"/>
+            <path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/>
+            <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/>
+          </svg>
+        </div>
+        <h3 class="expertise__title">RAG Pipelines</h3>
+        <p class="expertise__desc">Custom Retrieval-Augmented Generation architectures that connect your enterprise data safely to frontier LLMs — with chunking strategies, hybrid search, and citation you can audit.</p>
+        <ul class="expertise__features">
+          <li>Hybrid vector + BM25 retrieval</li>
+          <li>Document-level citations</li>
+          <li>Multi-tenant access control</li>
+          <li>Streaming + batch ingestion</li>
+        </ul>
+      </article>
+
+      <article class="expertise__card" data-accent="purple" style="--row:0; --col:1">
+        <div class="expertise__num">02 / 03</div>
+        <div class="expertise__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+        </div>
+        <h3 class="expertise__title">RAG Chatbots</h3>
+        <p class="expertise__desc">Context-aware customer service bots that resolve queries using your internal knowledge base — not hallucinated guesses. Handoff to humans when confidence drops, every time.</p>
+        <ul class="expertise__features">
+          <li>Confidence-scored responses</li>
+          <li>Human handoff protocols</li>
+          <li>Brand-voice tuning</li>
+          <li>Slack, Teams, web, mobile</li>
+        </ul>
+      </article>
+
+      <article class="expertise__card" data-accent="emerald" style="--row:0; --col:2">
+        <div class="expertise__num">03 / 03</div>
+        <div class="expertise__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07l4.24-4.24"/>
+          </svg>
+        </div>
+        <h3 class="expertise__title">Agentic AI</h3>
+        <p class="expertise__desc">Autonomous agents that execute multi-step workflows, use tools, and make complex decisions — closing tickets, updating records, and orchestrating your existing stack without humans in the loop.</p>
+        <ul class="expertise__features">
+          <li>Tool use + function calling</li>
+          <li>Multi-step planning</li>
+          <li>Guardrails + approval flows</li>
+          <li>Salesforce, Zendesk, Jira</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ARCHITECTURE
+     ============================================================ -->
+<section class="architecture" id="architecture">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__eyebrow eyebrow">Architecture · How It Works</div>
+      <h2 class="section-head__title h-section">From data to decision, in four moves.</h2>
+      <p class="section-head__sub lead">A transparent pipeline you can audit at any stage. No black boxes, no untraceable outputs — every response is grounded in a citable source.</p>
+    </div>
+
+    <div class="arch__grid">
+      <div class="arch__steps">
+        <div class="arch__step">
+          <div class="arch__num">01</div>
+          <div class="arch__step-body">
+            <div class="arch__step-label">Ingest</div>
+            <h3 class="arch__step-title">Connect your knowledge base</h3>
+            <p class="arch__step-desc">We pull from Confluence, Notion, Slack, your help center, PDFs, and internal APIs — chunking intelligently by document structure, not arbitrary character counts.</p>
+            <div class="arch__step-tags">
+              <span class="arch__tag">confluence</span>
+              <span class="arch__tag">notion</span>
+              <span class="arch__tag">slack</span>
+              <span class="arch__tag">pdf</span>
+              <span class="arch__tag">api</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch__step">
+          <div class="arch__num">02</div>
+          <div class="arch__step-body">
+            <div class="arch__step-label">Embed</div>
+            <h3 class="arch__step-title">Vectorize for semantic search</h3>
+            <p class="arch__step-desc">Documents become searchable embeddings in a vector database — pgvector, Pinecone, or Qdrant — with hybrid retrieval combining dense vectors and BM25 keyword matching for precision.</p>
+            <div class="arch__step-tags">
+              <span class="arch__tag">pgvector</span>
+              <span class="arch__tag">pinecone</span>
+              <span class="arch__tag">qdrant</span>
+              <span class="arch__tag">hybrid</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch__step">
+          <div class="arch__num">03</div>
+          <div class="arch__step-body">
+            <div class="arch__step-label">Retrieve</div>
+            <h3 class="arch__step-title">Pull relevant context, rank, rerank</h3>
+            <p class="arch__step-desc">When a query arrives, the system retrieves the top-K chunks, reranks them with a cross-encoder, and assembles a grounded prompt — complete with citations the bot will reference in its answer.</p>
+            <div class="arch__step-tags">
+              <span class="arch__tag">cross-encoder</span>
+              <span class="arch__tag">rerank</span>
+              <span class="arch__tag">citations</span>
+              <span class="arch__tag">top-k</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="arch__step">
+          <div class="arch__num">04</div>
+          <div class="arch__step-body">
+            <div class="arch__step-label">Respond</div>
+            <h3 class="arch__step-title">Generate, act, or escalate</h3>
+            <p class="arch__step-desc">The LLM generates a grounded response. If the query needs action, an agentic layer triggers tool calls — refunding a charge, updating a ticket, escalating to a human when confidence drops below threshold.</p>
+            <div class="arch__step-tags">
+              <span class="arch__tag">tool-use</span>
+              <span class="arch__tag">escalation</span>
+              <span class="arch__tag">guardrails</span>
+              <span class="arch__tag">audit-log</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch__visual">
+        <div class="arch__visual-title">
+          <span>Pipeline · Live Trace</span>
+          <span>● operational</span>
+        </div>
+        <div class="arch__flow">
+          <div class="arch__node">
+            <div class="arch__node-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="4" rx="6" ry="2"/><path d="M2 4v8c0 1.1 2.7 2 6 2s6-.9 6-2V4"/></svg>
+            </div>
+            <div class="arch__node-body">
+              <div class="arch__node-title">Source connectors</div>
+              <div class="arch__node-meta">12 sources · synced 2m ago</div>
+            </div>
+            <div class="arch__node-status"></div>
+          </div>
+          <div class="arch__connector"><div class="arch__connector-dot"></div></div>
+
+          <div class="arch__node">
+            <div class="arch__node-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4-4 4 4-4 4-4-4z"/><path d="M8 8l4-4 4 4-4 4-4-4z"/></svg>
+            </div>
+            <div class="arch__node-body">
+              <div class="arch__node-title">Embedding + indexing</div>
+              <div class="arch__node-meta">847k chunks · 1536 dim</div>
+            </div>
+            <div class="arch__node-status"></div>
+          </div>
+          <div class="arch__connector"><div class="arch__connector-dot"></div></div>
+
+          <div class="arch__node">
+            <div class="arch__node-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg>
+            </div>
+            <div class="arch__node-body">
+              <div class="arch__node-title">Retrieval + rerank</div>
+              <div class="arch__node-meta">top-3 of 847k · 284ms</div>
+            </div>
+            <div class="arch__node-status"></div>
+          </div>
+          <div class="arch__connector"><div class="arch__connector-dot"></div></div>
+
+          <div class="arch__node">
+            <div class="arch__node-icon">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5l2-5z"/></svg>
+            </div>
+            <div class="arch__node-body">
+              <div class="arch__node-title">Agentic response</div>
+              <div class="arch__node-meta">resolved · 1.8s total</div>
+            </div>
+            <div class="arch__node-status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     METRICS
+     ============================================================ -->
+<section class="metrics">
+  <div class="container">
+    <div class="metrics__grid">
+      <div class="metrics__cell" style="--idx:0">
+        <div class="metrics__num">94.2%</div>
+        <div class="metrics__label">First-contact resolution</div>
+        <div class="metrics__sub">↑ from 61% baseline</div>
+      </div>
+      <div class="metrics__cell" style="--idx:1">
+        <div class="metrics__num">1.8s</div>
+        <div class="metrics__label">Median response latency</div>
+        <div class="metrics__sub">p95 · 3.2s</div>
+      </div>
+      <div class="metrics__cell" style="--idx:2">
+        <div class="metrics__num">-68%</div>
+        <div class="metrics__label">Support cost per ticket</div>
+        <div class="metrics__sub">measured at 90 days</div>
+      </div>
+      <div class="metrics__cell" style="--idx:3">
+        <div class="metrics__num">0</div>
+        <div class="metrics__label">Hallucinated citations</div>
+        <div class="metrics__sub">across 12M queries</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECURITY
+     ============================================================ -->
+<section class="security" id="security">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-head__eyebrow eyebrow">Trust &amp; Security</div>
+      <h2 class="section-head__title h-section">Enterprise-grade by default.</h2>
+      <p class="section-head__sub lead">Your data never trains a public model. Every deployment is isolated, encrypted, and auditable — deployable in your VPC, on-premise, or in our managed cloud.</p>
+    </div>
+
+    <div class="security__grid">
+      <div class="security__feature" style="--idx:0">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 7v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V7l-8-5z"/></svg>
+        </div>
+        <h3 class="security__title">End-to-end encryption</h3>
+        <p class="security__desc">AES-256 at rest, TLS 1.3 in transit, with per-tenant encryption keys rotated on a 90-day schedule.</p>
+      </div>
+
+      <div class="security__feature" style="--idx:1">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <h3 class="security__title">On-premise deployment</h3>
+        <p class="security__desc">Ship the entire stack to your own VPC or bare-metal infrastructure. Your data, your network, your perimeter.</p>
+      </div>
+
+      <div class="security__feature" style="--idx:2">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><path d="M21 12c0 5-3.5 7.5-8.5 9.5C7.5 19.5 4 17 4 12V6l8.5-3.5L21 6v6z"/></svg>
+        </div>
+        <h3 class="security__title">SOC 2 Type II</h3>
+        <p class="security__desc">Annual third-party audits covering security, availability, confidentiality, and processing integrity.</p>
+      </div>
+
+      <div class="security__feature" style="--idx:3">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3 class="security__title">Zero data retention</h3>
+        <p class="security__desc">Queries and responses are purged on configurable schedules. No training on your data, ever — written into our DPA.</p>
+      </div>
+
+      <div class="security__feature" style="--idx:4">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 class="security__title">Role-based access</h3>
+        <p class="security__desc">Granular RBAC down to the document level — agents only retrieve what each user is authorized to see.</p>
+      </div>
+
+      <div class="security__feature" style="--idx:5">
+        <div class="security__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+        </div>
+        <h3 class="security__title">Full audit logs</h3>
+        <p class="security__desc">Every retrieval, generation, and tool call is logged with timestamps, inputs, and outputs — exportable to your SIEM.</p>
+      </div>
+    </div>
+
+    <div class="security__banner">
+      <div>
+        <h3 class="security__banner-title">Compliance-ready out of the box</h3>
+        <p class="security__banner-desc">GDPR, HIPAA, and CCPA aligned. Data residency options for EU, US, and APAC regions.</p>
+      </div>
+      <div class="security__badges">
+        <div class="security__badge">SOC 2</div>
+        <div class="security__badge">GDPR</div>
+        <div class="security__badge">HIPAA</div>
+        <div class="security__badge">CCPA</div>
+        <div class="security__badge">ISO 27001</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="contact" id="contact">
+  <div class="container container--narrow">
+    <div class="contact__container">
+      <div class="contact__info">
+        <div class="eyebrow">Book a Demo</div>
+        <h2 class="contact__title">See AXIOM on your data, in 30 minutes.</h2>
+        <p class="contact__desc">We'll wire up a RAG pipeline against a sample of your knowledge base, run live queries, and show you the retrieval trace end-to-end. No slideware.</p>
+        <div class="contact__details">
+          <div class="contact__detail">
+            <div class="contact__detail-icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3h10v10H3z" stroke-linejoin="round"/><path d="M3 6l5 3 5-3"/></svg>
+            </div>
+            <div>
+              <div class="contact__detail-label">Email</div>
+              <div class="contact__detail-value">hello@axiom.ai</div>
+            </div>
+          </div>
+          <div class="contact__detail">
+            <div class="contact__detail-icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4l5 4 5-4M3 4v8h10V4" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="contact__detail-label">Response time</div>
+              <div class="contact__detail-value">Within 4 business hours</div>
+            </div>
+          </div>
+          <div class="contact__detail">
+            <div class="contact__detail-icon">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l2.5 1.5"/></svg>
+            </div>
+            <div>
+              <div class="contact__detail-label">Availability</div>
+              <div class="contact__detail-value">Mon–Fri · 9am–6pm PT</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="form" id="contactForm" novalidate>
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="name">Name</label>
+            <input class="form__input" type="text" id="name" name="name" placeholder="Jane Chen" required>
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="company">Company</label>
+            <input class="form__input" type="text" id="company" name="company" placeholder="Acme Inc." required>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="email">Work email</label>
+            <input class="form__input" type="email" id="email" name="email" placeholder="jane@acme.com" required>
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="volume">Query volume</label>
+            <select class="form__select" id="volume" name="volume">
+              <option>Under 10k / month</option>
+              <option>10k – 100k / month</option>
+              <option>100k – 1M / month</option>
+              <option>Over 1M / month</option>
+            </select>
+          </div>
+        </div>
+        <div class="form__group">
+          <label class="form__label" for="interest">What are you looking to solve?</label>
+          <textarea class="form__textarea" id="interest" name="interest" placeholder="We're handling 80k support tickets a month across Zendesk and want to deflect the long tail with a RAG bot trained on our help center."></textarea>
+        </div>
+        <button type="submit" class="form__submit" data-cursor-hover>
+          Request Demo
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="form__success" id="formSuccess">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M5 8l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Thanks — we'll be in touch within 4 business hours.</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <span class="nav__brand-mark"></span>
+          AXIOM
+        </div>
+        <p class="footer__tagline">AI automation, engineered for enterprise. We build the RAG pipelines, chatbots, and agentic workflows that resolve your customer queries — securely, traceably, at scale.</p>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Product</div>
+        <ul>
+          <li><a href="#expertise">RAG Pipelines</a></li>
+          <li><a href="#expertise">RAG Chatbots</a></li>
+          <li><a href="#expertise">Agentic AI</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Company</div>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Engineering</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <div class="footer__col-title">Resources</div>
+        <ul>
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">Compliance</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div>© 2025 AXIOM AI Systems, Inc.</div>
+      <div>San Francisco · New York · London</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     FLOATING CHATBOT
+     ============================================================ -->
+<div class="chatbot" id="chatbot">
+  <button class="chatbot__fab" id="chatbotFab" aria-label="Open chat" data-cursor-hover>
+    <div class="chatbot__fab-pulse"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+  </button>
+
+  <div class="chatbot__window" id="chatbotWindow">
+    <div class="chatbot__header">
+      <div class="chatbot__header-info">
+        <div class="chatbot__avatar"></div>
+        <div>
+          <div class="chatbot__name">AXIOM Assistant</div>
+          <div class="chatbot__status">Online · typically replies instantly</div>
+        </div>
+      </div>
+      <button class="chatbot__close" id="chatbotClose" aria-label="Close chat">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3l8 8M11 3l-8 8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="chatbot__body" id="chatbotBody">
+      <div class="chatbot__msg chatbot__msg--bot">
+        <div class="chatbot__msg-avatar"></div>
+        <div class="chatbot__msg-bubble">
+          Hi — I'm AXIOM's assistant. I can answer questions about our RAG pipelines, deployment options, or how we'd architect a solution for your team. What would you like to know?
+        </div>
+      </div>
+    </div>
+
+    <div class="chatbot__quick" id="chatbotQuick">
+      <div class="chatbot__quick-label">Suggested</div>
+      <div class="chatbot__quick-buttons">
+        <button class="chatbot__quick-btn" data-query="rag">How does RAG work?</button>
+        <button class="chatbot__quick-btn" data-query="security">Data security?</button>
+        <button class="chatbot__quick-btn" data-query="timeline">Deployment timeline?</button>
+        <button class="chatbot__quick-btn" data-query="pricing">Pricing model?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+  // ============================================================
+  // SCROLL PROGRESS
+  // ============================================================
+  const scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    scrollProgress.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  updateScrollProgress();
+
+  // ============================================================
+  // CUSTOM CURSOR
+  // ============================================================
+  if (!isCoarsePointer) {
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorRing.style.transform = `translate(${ringX}px, ${ringY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, [data-cursor-hover], input, textarea, select').forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('is-hover'));
+    });
+  }
+
+  // ============================================================
+  // INTERSECTION OBSERVER (reveal animations)
+  // ============================================================
+  const observerOptions = { rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-in');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  // Hero fires immediately
+  const hero = document.getElementById('hero');
+  if (hero) {
+    requestAnimationFrame(() => hero.classList.add('is-in'));
+  }
+
+  // Section heads
+  document.querySelectorAll('.section-head').forEach(el => revealObserver.observe(el));
+
+  // Expertise cards
+  document.querySelectorAll('.expertise__card').forEach(el => revealObserver.observe(el));
+
+  // Architecture steps
+  document.querySelectorAll('.arch__step').forEach(el => revealObserver.observe(el));
+
+  // Security features
+  document.querySelectorAll('.security__feature').forEach(el => revealObserver.observe(el));
+
+  // Metrics
+  document.querySelectorAll('.metrics__cell').forEach(el => revealObserver.observe(el));
+
+  // Contact
+  const contactSection = document.getElementById('contact');
+  if (contactSection) revealObserver.observe(contactSection);
+
+  // ============================================================
+  // HERO WIDGET — Live RAG retrieval loop
+  // ============================================================
+  const widgetQuery = document.getElementById('widgetQuery');
+  const widgetAnswer = document.getElementById('widgetAnswer');
+  const widgetChunks = document.querySelectorAll('.widget__chunk');
+  const widgetStatus = document.getElementById('widgetStatus');
+  const widgetLatency = document.getElementById('widgetLatency');
+  const widgetTokens = document.getElementById('widgetTokens');
+
+  const demoQueries = [
+    {
+      query: "How do I get a refund for a delayed order?",
+      answer: "If your order is delayed beyond the estimated delivery window, you're eligible for a full refund under §3.2 of our refund policy. I can process that for you now — would you like me to issue the refund to your original payment method?",
+      latency: '1.8s',
+      tokens: '142'
+    },
+    {
+      query: "What's your enterprise SLA for support response?",
+      answer: "Enterprise customers receive a 4-hour first-response SLA, with 1-hour escalation for critical issues. Our RAG chatbot handles tier-1 queries in under 2 seconds, with human handoff for anything requiring account-level changes.",
+      latency: '1.4s',
+      tokens: '98'
+    },
+    {
+      query: "Can I export my chatbot conversation history?",
+      answer: "Yes — conversation logs are exportable via our API or dashboard in JSON, CSV, or Parquet formats. Enterprise plans include automatic weekly exports to your S3 bucket. Logs are retained for 90 days by default, configurable up to 2 years.",
+      latency: '2.1s',
+      tokens: '124'
+    }
+  ];
+
+  let demoIndex = 0;
+
+  function typeText(element, text, speed, callback) {
+    let i = 0;
+    element.textContent = '';
+    element.classList.remove('is-done');
+    const interval = setInterval(() => {
+      element.textContent += text.charAt(i);
+      i++;
+      if (i >= text.length) {
+        clearInterval(interval);
+        element.classList.add('is-done');
+        if (callback) callback();
+      }
+    }, prefersReducedMotion ? 0 : speed);
+  }
+
+  function runDemoCycle() {
+    if (!document.querySelector('.widget') || document.hidden) return;
+
+    const demo = demoQueries[demoIndex];
+    demoIndex = (demoIndex + 1) % demoQueries.length;
+
+    // Reset
+    widgetChunks.forEach(c => c.classList.remove('is-in'));
+    widgetAnswer.textContent = '';
+    widgetStatus.textContent = 'Searching...';
+    widgetStatus.style.color = 'var(--accent-blue)';
+    widgetLatency.textContent = '—';
+    widgetTokens.textContent = '—';
+
+    // Type query
+    typeText(widgetQuery, demo.query, 35, () => {
+      widgetStatus.textContent = 'Retrieving chunks...';
+      
+      // Reveal chunks
+      widgetChunks.forEach((chunk, i) => {
+        setTimeout(() => chunk.classList.add('is-in'), i * 200);
+      });
+
+      // Generate answer
+      setTimeout(() => {
+        widgetStatus.textContent = 'Generating response...';
+        widgetStatus.style.color = 'var(--accent-purple)';
+        
+        setTimeout(() => {
+          typeText(widgetAnswer, demo.answer, 18, () => {
+            widgetStatus.textContent = 'Resolved';
+            widgetStatus.style.color = 'var(--accent-emerald)';
+            widgetLatency.textContent = demo.latency;
+            widgetTokens.textContent = demo.tokens;
+          });
+        }, 600);
+      }, 1200);
+    });
+  }
+
+  // Start demo cycle after a delay
+  setTimeout(() => {
+    runDemoCycle();
+    if (!prefersReducedMotion) {
+      setInterval(runDemoCycle, 12000);
+    }
+  }, 2200);
+
+  // ============================================================
+  // CHATBOT WIDGET
+  // ============================================================
+  const chatbotFab = document.getElementById('chatbotFab');
+  const chatbotWindow = document.getElementById('chatbotWindow');
+  const chatbotClose = document.getElementById('chatbotClose');
+  const chatbotBody = document.getElementById('chatbotBody');
+  const chatbotQuick = document.getElementById('chatbotQuick');
+
+  const chatResponses = {
+    rag: "Our RAG pipelines use hybrid retrieval — combining dense vector search with BM25 keyword matching — then rerank the top-K chunks with a cross-encoder. Every response is grounded in citable sources from your knowledge base, with zero hallucinated citations across 12M+ queries shipped.\n\nWe support Confluence, Notion, Slack, PDFs, help centers, and custom APIs as source connectors, ingesting on a configurable sync schedule.",
+    security: "Security is built into the foundation, not bolted on:\n\n• AES-256 at rest, TLS 1.3 in transit\n• Per-tenant encryption keys, rotated every 90 days\n• Zero data retention — we never train on your data\n• SOC 2 Type II, GDPR, HIPAA, CCPA aligned\n• Full audit logs exportable to your SIEM\n• Deployable in your VPC, on-prem, or in our managed cloud\n\nYour data stays in your perimeter. We can ship the entire stack to your infrastructure if that's a requirement.",
+    timeline: "Typical deployment timeline:\n\nWeek 1 — Discovery & data audit. We map your knowledge sources and identify gaps.\nWeek 2 — Pipeline build. RAG ingestion, vector indexing, retrieval tuning on your data.\nWeek 3 — Bot integration. Connect to your support channels (Slack, Teams, web, Zendesk).\nWeek 4 — Pilot launch with a subset of traffic, monitoring accuracy and latency.\nWeek 5+ — Rollout to full volume with ongoing optimization.\n\nFor enterprise, we can have a working demo on your data within the first week.",
+    pricing: "Pricing scales with query volume and deployment model:\n\n• Managed cloud — per-query pricing, starting at $0.04/resolved ticket\n• Dedicated VPC — flat monthly + usage, starting at $8k/mo\n• On-premise — annual license, custom quote\n\nEvery plan includes the full stack: RAG pipeline, chatbot, agentic workflows, dashboard, and audit logs. We're happy to scope a quote once we understand your volume and use case — want to book a 30-minute demo?"
+  };
+
+  function addMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.className = `chatbot__msg chatbot__msg--${sender}`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chatbot__msg-avatar';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chatbot__msg-bubble';
+    bubble.textContent = text;
+    
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    chatbotBody.appendChild(msg);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+  }
+
+  function addTyping() {
+    const msg = document.createElement('div');
+    msg.className = 'chatbot__msg chatbot__msg--bot';
+    msg.id = 'typing-indicator';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'chatbot__msg-avatar';
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chatbot__msg-bubble';
+    bubble.innerHTML = '<div class="chatbot__typing"><span></span><span></span><span></span></div>';
+    
+    msg.appendChild(avatar);
+    msg.appendChild(bubble);
+    chatbotBody.appendChild(msg);
+    chatbotBody.scrollTop = chatbotBody.scrollHeight;
+  }
+
+  function removeTyping() {
+    const typing = document.getElementById('typing-indicator');
+    if (typing) typing.remove();
+  }
+
+  function handleQuickQuery(queryKey, queryText) {
+    // Add user message
+    addMessage(queryText, 'user');
+    
+    // Hide quick buttons after first interaction
+    chatbotQuick.style.display = 'none';
+    
+    // Show typing
+    setTimeout(() => addTyping(), 300);
+    
+    // Bot response
+    setTimeout(() => {
+      removeTyping();
+      const response = chatResponses[queryKey] || "I'd be happy to help with that. Could you provide a bit more detail, or would you like to book a demo with our team?";
+      // Split by double newline for paragraph breaks
+      const paragraphs = response.split('\n\n');
+      let fullText = '';
+      paragraphs.forEach((p, i) => {
+        if (i > 0) fullText += '\n\n';
+        fullText += p;
+      });
+      addMessage(fullText, 'bot');
+    }, 1400);
+  }
+
+  chatbotFab.addEventListener('click', () => {
+    chatbotWindow.classList.add('is-open');
+    chatbotFab.classList.add('is-hidden');
+  });
+
+  chatbotClose.addEventListener('click', () => {
+    chatbotWindow.classList.remove('is-open');
+    chatbotFab.classList.remove('is-hidden');
+  });
+
+  document.querySelectorAll('.chatbot__quick-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const queryKey = btn.getAttribute('data-query');
+      const queryText = btn.textContent;
+      handleQuickQuery(queryKey, queryText);
+    });
+  });
+
+  // Auto-open chatbot after 8 seconds (once)
+  let autoOpened = false;
+  function maybeAutoOpen() {
+    if (autoOpened) return;
+    if (document.hidden) return;
+    const scrolled = window.scrollY;
+    if (scrolled > 600 && !chatbotWindow.classList.contains('is-open') && chatbotFab.classList.contains('is-hidden') === false) {
+      // Don't auto-open, just pulse — let the user decide
+      autoOpened = true;
+    }
+  }
+  window.addEventListener('scroll', maybeAutoOpen, { passive: true });
+
+  // ============================================================
+  // CONTACT FORM
+  // ============================================================
+  const contactForm = document.getElementById('contactForm');
+  const formSuccess = document.getElementById('formSuccess');
+
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const company = document.getElementById('company').value.trim();
+    
+    if (!name || !email || !company) {
+      // Highlight missing fields
+      if (!name) document.getElementById('name').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+      if (!email) document.getElementById('email').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+      if (!company) document.getElementById('company').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+      return;
+    }
+    
+    // Show success message
+    formSuccess.classList.add('is-visible');
+    
+    // Reset form
+    contactForm.reset();
+    
+    // Hide success after 5 seconds
+    setTimeout(() => {
+      formSuccess.classList.remove('is-visible');
+    }, 6000);
+  });
+
+  // Clear error styling on input
+  ['name', 'email', 'company'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', () => {
+        el.style.borderColor = '';
+      });
+    }
+  });
+
+  // ============================================================
+  // SMOOTH SCROLL FOR ANCHOR LINKS
+  // ============================================================
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      const target = document.querySelector(targetId);
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: targetPosition, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      }
+    });
+  });
+
+  // ============================================================
+  // PAUSE ANIMATIONS WHEN TAB HIDDEN
+  // ============================================================
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      document.body.classList.add('tab-hidden');
+    } else {
+      document.body.classList.remove('tab-hidden');
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
