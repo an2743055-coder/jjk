@@ -858,6 +858,184 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   .orb { animation: none; }
   .chatbot__fab-pulse { display: none; }
 }
+
+/* ============================================================
+   21. PROJECTS SECTION
+   ============================================================ */
+.projects { padding: 8rem 0 2rem; }
+.projects__container {
+  display: grid; grid-template-columns: 1fr 1.15fr; gap: 4rem; align-items: start;
+  padding: 3rem; border-radius: 32px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  position: relative; overflow: hidden;
+}
+.projects__container::before {
+  content: ''; position: absolute; top: -1px; left: 20%; right: 20%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-purple), var(--accent-blue), transparent);
+}
+
+/* Left info panel */
+.projects__info { display: flex; flex-direction: column; gap: 2rem; }
+.projects__title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.025em; }
+.projects__desc { color: var(--text-secondary); font-size: 1rem; line-height: 1.65; }
+
+/* Project type cards — click to select */
+.project-types { display: flex; flex-direction: column; gap: 0.625rem; }
+.project-type-card {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.875rem 1.125rem; border-radius: 12px;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  cursor: pointer; transition: all 250ms var(--ease-precise);
+  user-select: none;
+}
+.project-type-card:hover { border-color: var(--glass-border-strong); background: rgba(255,255,255,0.05); }
+.project-type-card.is-selected {
+  background: rgba(168, 85, 247, 0.08);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.1);
+}
+.project-type-card.is-selected .ptc__dot { background: var(--accent-purple); box-shadow: 0 0 8px var(--accent-purple); }
+.project-type-card.is-selected .ptc__name { color: var(--text-primary); }
+.ptc__dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  background: var(--text-tertiary); transition: all 250ms var(--ease-precise);
+}
+.ptc__icon {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary); transition: color 250ms var(--ease-precise);
+}
+.project-type-card.is-selected .ptc__icon { color: var(--accent-purple); border-color: rgba(168,85,247,0.3); }
+.ptc__icon svg { width: 16px; height: 16px; }
+.ptc__text { flex: 1; }
+.ptc__name { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); transition: color 250ms; }
+.ptc__hint { font-size: 0.75rem; color: var(--text-tertiary); font-family: 'JetBrains Mono', monospace; margin-top: 0.125rem; }
+
+/* Right form panel */
+.projects__form-wrap { display: flex; flex-direction: column; gap: 1.25rem; }
+.project-form__hidden-type {
+  /* hidden input that syncs with the type card selection */
+  display: none;
+}
+.project-form__selected-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.75rem; border-radius: 100px;
+  background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--accent-purple); text-transform: uppercase;
+  transition: all 250ms var(--ease-precise);
+}
+.project-form__selected-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-purple); box-shadow: 0 0 6px var(--accent-purple);
+}
+.project-form__error {
+  padding: 0.875rem 1.125rem; border-radius: 10px;
+  background: rgba(255, 80, 80, 0.08); border: 1px solid rgba(255, 80, 80, 0.25);
+  color: #ff6b6b; font-size: 0.875rem; display: none;
+  align-items: center; gap: 0.625rem;
+}
+.project-form__error.is-visible { display: flex; animation: fade-in 400ms var(--ease-quiet); }
+.project-form__success {
+  padding: 1.25rem; border-radius: 10px;
+  background: rgba(16, 217, 160, 0.08); border: 1px solid rgba(16, 217, 160, 0.25);
+  color: var(--accent-emerald); font-size: 0.9375rem; display: none;
+  flex-direction: column; gap: 0.375rem;
+}
+.project-form__success.is-visible { display: flex; animation: fade-in 500ms var(--ease-quiet); }
+.project-form__success strong { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; }
+.project-form__submit {
+  padding: 1.125rem 1.5rem; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent-purple) 0%, #7c3aed 100%);
+  color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem;
+  letter-spacing: -0.01em; transition: all 300ms var(--ease-quiet);
+  box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.3), 0 8px 24px rgba(168, 85, 247, 0.25);
+  display: flex; align-items: center; justify-content: center; gap: 0.625rem;
+  border: none; cursor: pointer; width: 100%;
+}
+.project-form__submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(168, 85, 247, 0.5), 0 12px 32px rgba(168, 85, 247, 0.4); }
+.project-form__submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.project-form__submit .spinner {
+  width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; display: none;
+}
+.project-form__submit.is-loading .spinner { display: block; }
+.project-form__submit.is-loading .submit-text { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 980px) {
+  .projects__container { grid-template-columns: 1fr; padding: 2rem; gap: 2.5rem; }
+}
+
+/* Project form — badge, error, button, success */
+.req { color: #ff6b6b; }
+.form__label-hint { font-size: 0.65rem; color: var(--text-tertiary); margin-left: 0.4rem; text-transform: none; letter-spacing: 0; }
+.proj-textarea { min-height: 140px; }
+
+.proj-type-badge {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.875rem; border-radius: 100px; margin-bottom: 0.25rem;
+  background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.35);
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em;
+  color: var(--accent-purple); text-transform: uppercase;
+  transition: all 300ms var(--ease-precise);
+}
+.proj-type-badge__dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent-purple); box-shadow: 0 0 6px var(--accent-purple);
+}
+
+.proj-error {
+  display: flex; align-items: center; gap: 0.625rem;
+  padding: 0.875rem 1.125rem; border-radius: 10px;
+  background: rgba(255, 80, 80, 0.08); border: 1px solid rgba(255, 80, 80, 0.3);
+  color: #ff6b6b; font-size: 0.875rem;
+  animation: fade-in 300ms var(--ease-quiet);
+}
+
+.proj-submit-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.625rem;
+  width: 100%; padding: 1.125rem 1.5rem; border-radius: 12px; border: none;
+  background: linear-gradient(135deg, var(--accent-purple) 0%, #6d28d9 100%);
+  color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem;
+  letter-spacing: -0.01em; cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(168,85,247,0.35), 0 8px 28px rgba(168,85,247,0.3);
+  transition: all 300ms var(--ease-quiet); position: relative; overflow: hidden;
+}
+.proj-submit-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+  pointer-events: none;
+}
+.proj-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(168,85,247,0.6), 0 12px 36px rgba(168,85,247,0.45);
+}
+.proj-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.proj-submit-btn__text { display: flex; align-items: center; gap: 0.5rem; }
+.proj-submit-btn__spinner {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+  animation: spin 0.65s linear infinite; display: none; flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.proj-success {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1.25rem 1.5rem; border-radius: 12px;
+  background: rgba(16, 217, 160, 0.07); border: 1px solid rgba(16, 217, 160, 0.3);
+  animation: fade-in 500ms var(--ease-quiet);
+}
+.proj-success__icon {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(16, 217, 160, 0.12); border: 1px solid rgba(16, 217, 160, 0.3);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-emerald);
+}
+.proj-success__title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; color: var(--accent-emerald); margin-bottom: 0.25rem; }
+.proj-success__sub { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -883,6 +1061,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     <nav class="nav__links">
       <a href="#expertise">Expertise</a>
       <a href="#architecture">Architecture</a>
+      <a href="#projects">Projects</a>
       <a href="#founder">Founder</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -1346,6 +1525,197 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   </div>
 </section>
 
+<!-- Projects -->
+<section class="projects" id="projects">
+  <div class="container container--narrow">
+    <div class="section-head">
+      <div class="section-head__eyebrow eyebrow">Submit a Project</div>
+      <h2 class="section-head__title h-section">Tell us what you're building.</h2>
+      <p class="section-head__sub lead">Select your project type, describe it in detail, and we'll get back with a plan within 24 hours.</p>
+    </div>
+
+    <div class="projects__container">
+
+      <!-- LEFT: project type cards -->
+      <div class="projects__info">
+        <p class="projects__desc">Pick the category that fits your idea best. Not sure? Choose <em>Other</em> — we'll advise.</p>
+
+        <div class="project-types" id="projectTypes">
+
+          <div class="project-type-card is-selected" data-value="RAG Pipeline">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.66 3.58 3 8 3s8-1.34 8-3V6"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">RAG Pipeline</div>
+              <div class="ptc__hint">retrieval-augmented generation</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="RAG Chatbot">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">RAG Chatbot</div>
+              <div class="ptc__hint">knowledge-base Q&amp;A bot</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="Agentic AI">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 10v6M4.22 4.22l4.24 4.24m7.07 7.07l4.24 4.24M1 12h6m10 0h6M4.22 19.78l4.24-4.24m7.07-7.07l4.24-4.24"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">Agentic AI</div>
+              <div class="ptc__hint">autonomous multi-step agents</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="Fine-Tuning">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">Fine-Tuning</div>
+              <div class="ptc__hint">custom model training on your data</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="AI Automation">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">AI Automation</div>
+              <div class="ptc__hint">workflow &amp; process automation</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="Custom LLM App">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">Custom LLM App</div>
+              <div class="ptc__hint">bespoke ai-powered product</div>
+            </div>
+          </div>
+
+          <div class="project-type-card" data-value="Other">
+            <span class="ptc__dot"></span>
+            <div class="ptc__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="ptc__text">
+              <div class="ptc__name">Other / Not Sure</div>
+              <div class="ptc__hint">describe it and we'll advise</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: project submission form -->
+      <div class="projects__form-wrap reveal" id="projectFormWrap">
+
+        <div class="proj-type-badge" id="projTypeBadge">
+          <span class="proj-type-badge__dot"></span>
+          <span id="projTypeBadgeText">RAG Pipeline</span>
+        </div>
+
+        <div class="form__group">
+          <label class="form__label" for="proj_name">Full Name <span class="req">*</span></label>
+          <input class="form__input" type="text" id="proj_name" placeholder="Vinod Kumar" autocomplete="name">
+        </div>
+
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="proj_email">Email Address <span class="req">*</span></label>
+            <input class="form__input" type="email" id="proj_email" placeholder="you@company.com" autocomplete="email">
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="proj_company">Company / Org</label>
+            <input class="form__input" type="text" id="proj_company" placeholder="Acme Inc. (optional)" autocomplete="organization">
+          </div>
+        </div>
+
+        <div class="form__group">
+          <label class="form__label" for="proj_description">
+            Project Description <span class="req">*</span>
+            <span class="form__label-hint">(min. 20 characters)</span>
+          </label>
+          <textarea
+            class="form__textarea proj-textarea"
+            id="proj_description"
+            rows="6"
+            placeholder="Describe your project in detail — the problem it solves, your data sources, expected scale, integrations (Zendesk, Slack, Notion…), stack preferences, and any constraints…"
+          ></textarea>
+        </div>
+
+        <div class="form__row">
+          <div class="form__group">
+            <label class="form__label" for="proj_budget">Budget Range</label>
+            <select class="form__select" id="proj_budget">
+              <option value="">— select —</option>
+              <option value="Under $1,000">Under $1,000</option>
+              <option value="$1,000 – $5,000">$1,000 – $5,000</option>
+              <option value="$5,000 – $20,000">$5,000 – $20,000</option>
+              <option value="$20,000 – $50,000">$20,000 – $50,000</option>
+              <option value="$50,000+">$50,000+</option>
+              <option value="Not sure yet">Not sure yet</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label class="form__label" for="proj_timeline">Desired Timeline</label>
+            <select class="form__select" id="proj_timeline">
+              <option value="">— select —</option>
+              <option value="ASAP (1–2 weeks)">ASAP (1–2 weeks)</option>
+              <option value="Within 1 month">Within 1 month</option>
+              <option value="1–3 months">1–3 months</option>
+              <option value="3–6 months">3–6 months</option>
+              <option value="Flexible">Flexible</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Error message -->
+        <div class="proj-error" id="projError" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3M8 10.5v.5" stroke-linecap="round"/></svg>
+          <span id="projErrorText">Please fill in all required fields.</span>
+        </div>
+
+        <!-- Submit button -->
+        <button class="proj-submit-btn" id="projSubmitBtn" type="button">
+          <span class="proj-submit-btn__spinner" id="projSpinner"></span>
+          <span class="proj-submit-btn__text" id="projBtnText">
+            Submit Project
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+
+        <!-- Success message -->
+        <div class="proj-success" id="projSuccess" style="display:none">
+          <div class="proj-success__icon">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="9.5"/><path d="M7 11l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <div class="proj-success__title">Project submitted!</div>
+            <div class="proj-success__sub">We'll review and reply to your email within 24 hours.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Contact -->
 <section class="contact" id="contact">
   <div class="container container--narrow">
@@ -1595,6 +1965,14 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   const contactSection = document.getElementById('contact');
   if (contactSection) revealObserver.observe(contactSection);
 
+  // Observe project form wrap
+  const projectsSection = document.getElementById('projects');
+  if (projectsSection) {
+    projectsSection.querySelectorAll('.section-head').forEach(el => revealObserver.observe(el));
+  }
+  const projectFormWrap = document.getElementById('projectFormWrap');
+  if (projectFormWrap) revealObserver.observe(projectFormWrap);
+
   // Hero Widget Demo Loop
   const widgetQuery = document.getElementById('widgetQuery');
   const widgetAnswer = document.getElementById('widgetAnswer');
@@ -1777,36 +2155,134 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
   const contactForm = document.getElementById('contactForm');
   const formSuccess = document.getElementById('formSuccess');
 
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const company = document.getElementById('company').value.trim();
-    
-    if (!name || !email || !company) {
-      if (!name) document.getElementById('name').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-      if (!email) document.getElementById('email').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-      if (!company) document.getElementById('company').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-      return;
-    }
-    
-    formSuccess.classList.add('is-visible');
-    contactForm.reset();
-    setTimeout(() => {
-      formSuccess.classList.remove('is-visible');
-    }, 6000);
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const company = document.getElementById('company').value.trim();
+      if (!name || !email || !company) {
+        if (!name) document.getElementById('name').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+        if (!email) document.getElementById('email').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+        if (!company) document.getElementById('company').style.borderColor = 'rgba(255, 100, 100, 0.4)';
+        return;
+      }
+      if (formSuccess) {
+        formSuccess.classList.add('is-visible');
+        contactForm.reset();
+        setTimeout(() => formSuccess.classList.remove('is-visible'), 6000);
+      }
+    });
+    ['name', 'email', 'company'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => { el.style.borderColor = ''; });
+    });
+  }
+
+  // ============================================================
+  // PROJECT TYPE CARD SELECTOR
+  // ============================================================
+  const typeCards = document.querySelectorAll('.project-type-card');
+  const projTypeBadge = document.getElementById('projTypeBadge');
+  const projTypeBadgeText = document.getElementById('projTypeBadgeText');
+  let selectedProjectType = 'RAG Pipeline'; // default
+
+  typeCards.forEach(card => {
+    card.addEventListener('click', () => {
+      // Deselect all, select clicked
+      typeCards.forEach(c => c.classList.remove('is-selected'));
+      card.classList.add('is-selected');
+      selectedProjectType = card.getAttribute('data-value');
+      // Update badge
+      if (projTypeBadgeText) projTypeBadgeText.textContent = selectedProjectType;
+    });
   });
 
-  ['name', 'email', 'company'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.addEventListener('input', () => {
-        el.style.borderColor = '';
-      });
-    }
-  });
+  // ============================================================
+  // PROJECT FORM — SUBMIT via fetch() to FastAPI
+  // ============================================================
+  const projSubmitBtn = document.getElementById('projSubmitBtn');
+  const projBtnText   = document.getElementById('projBtnText');
+  const projSpinner   = document.getElementById('projSpinner');
+  const projError     = document.getElementById('projError');
+  const projErrorText = document.getElementById('projErrorText');
+  const projSuccess   = document.getElementById('projSuccess');
 
-  // Smooth Scroll
+  function showProjError(msg) {
+    projErrorText.textContent = msg;
+    projError.style.display = 'flex';
+    setTimeout(() => { projError.style.display = 'none'; }, 5000);
+  }
+
+  function setProjLoading(loading) {
+    projSubmitBtn.disabled = loading;
+    projSpinner.style.display  = loading ? 'block' : 'none';
+    projBtnText.style.display  = loading ? 'none'  : 'flex';
+  }
+
+  if (projSubmitBtn) {
+    projSubmitBtn.addEventListener('click', async () => {
+      // Read values
+      const name        = (document.getElementById('proj_name')?.value || '').trim();
+      const email       = (document.getElementById('proj_email')?.value || '').trim();
+      const company     = (document.getElementById('proj_company')?.value || '').trim();
+      const description = (document.getElementById('proj_description')?.value || '').trim();
+      const budget      = document.getElementById('proj_budget')?.value || '';
+      const timeline    = document.getElementById('proj_timeline')?.value || '';
+
+      // Client-side validation
+      if (!name) { showProjError('Please enter your name.'); return; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showProjError('Please enter a valid email address.'); return;
+      }
+      if (!description || description.length < 20) {
+        showProjError('Please describe your project in at least 20 characters.'); return;
+      }
+
+      setProjLoading(true);
+      projError.style.display = 'none';
+
+      try {
+        const response = await fetch('/api/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            company: company || null,
+            project_type: selectedProjectType,
+            project_description: description,
+            budget: budget || null,
+            timeline: timeline || null,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Hide button, show success
+          projSubmitBtn.style.display = 'none';
+          projSuccess.style.display = 'flex';
+          // Clear form fields
+          ['proj_name','proj_email','proj_company','proj_description','proj_budget','proj_timeline']
+            .forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.value = '';
+            });
+        } else {
+          showProjError(data.detail || 'Submission failed. Please try again.');
+          setProjLoading(false);
+        }
+      } catch (err) {
+        showProjError('Network error — please check your connection and try again.');
+        setProjLoading(false);
+      }
+    });
+  }
+
+  // ============================================================
+  // SMOOTH SCROLL
+  // ============================================================
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
       const targetId = this.getAttribute('href');
@@ -1828,6 +2304,7 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
       document.body.classList.remove('tab-hidden');
     }
   });
+
 
 })();
 </script>

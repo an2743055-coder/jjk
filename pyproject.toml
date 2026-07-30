@@ -1,9 +1,16 @@
 [project]
 name = "jjk"
 version = "0.1.0"
-description = "Add your description here"
+description = "Yeager AI — Full Stack Website"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "pandas>=3.0.5",
+    "fastapi==0.115.6",
+    "uvicorn[standard]==0.32.1",
+    "motor==3.6.0",
+    "pymongo==4.10.1",
+    "python-dotenv==1.0.1",
+    "pydantic[email]==2.10.3",
+    "email-validator==2.2.0",
+    "python-multipart==0.0.20",
 ]

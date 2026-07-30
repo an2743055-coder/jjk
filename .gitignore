@@ -1,10 +1,32 @@
-# Python-generated files
+# Python
 __pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
+*.pyc
+*.pyo
+*.pyd
+.Python
 
-# Virtual environments
-.venv
+# Virtual environment — never commit this
+.venv/
+venv/
+env/
+
+# Environment secrets — NEVER commit this
+# .env stays local; set these vars in Render dashboard instead
+.env
+
+# uv
+uv.lock
+.python-version
+
+# Windows scripts (local only)
+setup.bat
+start.bat
+
+# DO NOT ignore these — Render needs them in the repo:
+# render.yaml
+# requirements.txt
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
