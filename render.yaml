@@ -6,8 +6,6 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: MONGODB_URI
-        sync: false          # Set this manually in the Render dashboard — never commit secrets
       - key: DB_NAME
         value: yeager
       - key: COLLECTION_NAME
