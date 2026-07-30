@@ -78,7 +78,11 @@ async def lifespan(app: FastAPI):
         print("⚠️  MONGODB_URI not configured — submissions will fail until you set it.")
     else:
         try:
-            db_client = motor.motor_asyncio.AsyncIOMotorClient(MONGODB_URI)
+            db_client = motor.motor_asyncio.AsyncIOMotorClient(
+                MONGODB_URI,
+                tls=True,
+                tlsAllowInvalidCertificates=True,
+            )
             await db_client.admin.command("ping")
             print(f"✅ MongoDB connected → {DB_NAME}.{COLLECTION_NAME}")
         except Exception as e:
