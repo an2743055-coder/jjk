@@ -5,10 +5,3 @@ services:
     pythonVersion: "3.12"
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: DB_NAME
-        value: yeager
-      - key: COLLECTION_NAME
-        value: project_enquiries
-      - key: PYTHON_VERSION
-        value: "3.12"
