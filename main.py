@@ -146,6 +146,16 @@ async def serve_frontend():
     return FileResponse(BASE_DIR / "index.html")
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def serve_favicon():
+    return FileResponse(BASE_DIR / "logo.png", media_type="image/png")
+
+
+@app.get("/logo.png", include_in_schema=False)
+async def serve_logo():
+    return FileResponse(BASE_DIR / "logo.png", media_type="image/png")
+
+
 @app.get("/health")
 async def health():
     return {
