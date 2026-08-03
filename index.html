@@ -2136,28 +2136,66 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
     });
   });
 
-  // Contact Form
+  // Contact Form — Book a Demo (saves to MongoDB via /api/book-demo)
   const contactForm = document.getElementById('contactForm');
   const formSuccess = document.getElementById('formSuccess');
 
   if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const company = document.getElementById('company').value.trim();
-      if (!name || !email || !company) {
-        if (!name) document.getElementById('name').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-        if (!email) document.getElementById('email').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-        if (!company) document.getElementById('company').style.borderColor = 'rgba(255, 100, 100, 0.4)';
-        return;
-      }
-      if (formSuccess) {
-        formSuccess.classList.add('is-visible');
-        contactForm.reset();
-        setTimeout(() => formSuccess.classList.remove('is-visible'), 6000);
+
+      const nameEl    = document.getElementById('name');
+      const emailEl   = document.getElementById('email');
+      const companyEl = document.getElementById('company');
+      const volumeEl  = document.getElementById('volume');
+      const interestEl= document.getElementById('interest');
+
+      const name    = nameEl.value.trim();
+      const email   = emailEl.value.trim();
+      const company = companyEl.value.trim();
+
+      // Client-side validation
+      let valid = true;
+      [nameEl, emailEl, companyEl].forEach(el => el.style.borderColor = '');
+      if (!name)    { nameEl.style.borderColor    = 'rgba(255,100,100,0.4)'; valid = false; }
+      if (!email)   { emailEl.style.borderColor   = 'rgba(255,100,100,0.4)'; valid = false; }
+      if (!company) { companyEl.style.borderColor = 'rgba(255,100,100,0.4)'; valid = false; }
+      if (!valid) return;
+
+      const submitBtn = contactForm.querySelector('.form__submit');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+
+      try {
+        const response = await fetch('/api/book-demo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            company,
+            volume:   volumeEl?.value   || null,
+            interest: interestEl?.value.trim() || null,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          formSuccess.classList.add('is-visible');
+          contactForm.reset();
+          setTimeout(() => formSuccess.classList.remove('is-visible'), 6000);
+        } else {
+          alert(data.detail || 'Submission failed. Please try again.');
+        }
+      } catch (err) {
+        alert('Network error — please check your connection and try again.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Request Demo <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8m0 0L7 3m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       }
     });
+
     ['name', 'email', 'company'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('input', () => { el.style.borderColor = ''; });
