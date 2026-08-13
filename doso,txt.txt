@@ -1,0 +1,752 @@
+You are a senior enterprise product designer and frontend engineer.
+
+I have an existing production-oriented single-page website for **Yeager — an AI automation / AI engineering company**.
+
+Your task is to transform the EXISTING HTML file into a much more polished, premium, enterprise-grade website that feels credible enough for:
+
+* Startup founders
+* CTOs
+* Engineering leaders
+* Enterprise buyers
+* Product teams
+* US / UK / EU clients
+* Companies evaluating RAG, LLM applications, AI agents and automation
+
+## 🚨 ABSOLUTE RULE — DO NOT BREAK THE BACKEND
+
+This is extremely important.
+
+I only want a FRONTEND / UI / UX redesign.
+
+DO NOT modify, remove, rename, or change:
+
+* MongoDB
+* Database schemas
+* Backend APIs
+* API endpoints
+* Express/backend logic
+* Form submission logic
+* Request payload structures
+* JavaScript variables that are required by the backend
+* HTML IDs used by JavaScript or API calls
+* Existing event listeners
+* Existing API URLs
+* Existing authentication logic
+* Existing data flow
+* Existing form field names/IDs
+* Existing chatbot functionality
+* Existing project submission functionality
+
+The existing contact/project form and backend integration MUST continue working exactly as before.
+
+For example, if the current frontend submits to:
+
+`/api/book-demo`
+
+KEEP THAT EXACTLY THE SAME.
+
+Do not replace it with a mock API, localStorage, Firebase, Supabase, another endpoint, or fake submission.
+
+Do not touch MongoDB under any circumstances.
+
+## SCOPE
+
+You are allowed to modify ONLY:
+
+* HTML structure when necessary for presentation
+* CSS
+* frontend visual styling
+* frontend layout
+* frontend animations
+* frontend presentation
+* frontend micro-interactions
+* frontend accessibility improvements
+* frontend responsive behavior
+* frontend visual hierarchy
+
+You may add frontend-only CSS and JavaScript ONLY when it does not interfere with existing application logic.
+
+Before making changes, inspect the entire HTML file and understand how the existing JavaScript works.
+
+DO NOT blindly rewrite the file.
+
+Preserve all existing functionality.
+
+---
+
+# DESIGN DIRECTION
+
+The current website is already dark and futuristic.
+
+Take it significantly further.
+
+The target aesthetic is:
+
+**Enterprise AI × premium technology company × modern SaaS × intelligent infrastructure**
+
+Think of the visual quality of companies such as:
+
+* Linear
+* Vercel
+* Anthropic
+* OpenAI
+* Stripe
+* Palantir
+* Ramp
+* Perplexity
+
+But DO NOT copy any company's design directly.
+
+Create an original Yeager visual identity.
+
+The website should feel:
+
+* Expensive
+* Intelligent
+* Precise
+* Technical
+* Trustworthy
+* Minimal
+* Modern
+* Enterprise-ready
+* Fast
+* Sophisticated
+* Slightly futuristic
+
+Avoid making it look like:
+
+* A college project
+* A generic AI landing page
+* A template
+* A gaming website
+* A crypto website
+* An overly neon cyberpunk website
+* A flashy portfolio
+
+The goal is:
+
+**“This company could actually build and deploy AI systems for my organization.”**
+
+---
+
+# COLOR SYSTEM
+
+Keep the dark foundation but improve the color system.
+
+Use a restrained palette:
+
+* Deep near-black background
+* Graphite / charcoal surfaces
+* Off-white primary typography
+* Cool gray secondary typography
+* Electric cyan/blue as primary technology accent
+* Subtle emerald for successful/secure states
+* Very restrained purple only where useful
+
+Do NOT flood the page with gradients.
+
+Use gradients as accents rather than backgrounds everywhere.
+
+The page should have strong contrast and excellent readability.
+
+---
+
+# HERO SECTION
+
+Make the hero dramatically stronger.
+
+The first viewport should immediately communicate:
+
+WHAT YEAGER DOES
+WHO IT IS FOR
+WHY IT IS DIFFERENT
+WHAT THE VISITOR SHOULD DO NEXT
+
+Create a premium enterprise hero composition.
+
+The headline should feel confident and concise.
+
+Avoid generic phrases such as:
+
+“Revolutionizing the future with AI.”
+
+Instead communicate concrete value around:
+
+* RAG systems
+* AI agents
+* LLM applications
+* enterprise automation
+* secure AI infrastructure
+* production deployment
+
+Keep the existing business meaning/content accurate.
+
+Improve typography, spacing and hierarchy rather than inventing fake company claims.
+
+The primary CTA should be visually dominant.
+
+Secondary CTA should be understated.
+
+Add subtle technical visual elements around the hero if useful:
+
+* AI system status
+* retrieval indicators
+* architecture signals
+* live processing states
+* source references
+* deployment status
+* system telemetry
+
+But these MUST remain presentation-only.
+
+Do not create fake backend functionality.
+
+---
+
+# HERO AI DEMO
+
+The existing hero contains an interactive RAG-style demo.
+
+KEEP IT.
+
+Instead of removing it, make it look like a real enterprise AI console.
+
+Improve:
+
+* hierarchy
+* terminal styling
+* retrieval visualization
+* status indicators
+* source cards
+* response panel
+* latency/token presentation
+* subtle motion
+* typography
+* spacing
+
+Make it visually resemble a miniature production AI system.
+
+The visitor should immediately understand:
+
+Question → Retrieval → Context → Answer → Verification
+
+Do not change the existing demo's underlying JavaScript behavior unless absolutely necessary.
+
+---
+
+# NAVIGATION
+
+Redesign the navbar into a premium enterprise navigation system.
+
+Requirements:
+
+* Strong visual hierarchy
+* Excellent spacing
+* Subtle glass effect
+* Thin border
+* Smooth scroll state
+* Strong CTA
+* Responsive mobile navigation
+
+Avoid excessive pill-shaped UI everywhere.
+
+The navbar should feel more like a serious SaaS/company website than a futuristic portfolio.
+
+---
+
+# TRUST SECTION
+
+Improve the existing trust/value bar.
+
+Instead of making it feel like fake customer logos, present capabilities as enterprise trust signals.
+
+Examples:
+
+Source-grounded answers
+Human handoff
+Audit trails
+Private deployment
+Data isolation
+Role-based access
+Production support
+
+Do NOT invent customer logos or claim partnerships that don't exist.
+
+---
+
+# SERVICES / EXPERTISE
+
+Make the existing expertise cards much more premium.
+
+Services should visually communicate:
+
+RAG Engineering
+AI Agents
+LLM Applications
+AI Automation
+Enterprise AI Integration
+Custom AI Systems
+
+Use strong cards with:
+
+* clear iconography
+* short explanations
+* technical capability tags
+* subtle hover interactions
+* visual hierarchy
+* expandable-feeling details where appropriate
+
+Do not overanimate them.
+
+Hover effects should feel expensive and controlled.
+
+---
+
+# ARCHITECTURE SECTION
+
+This is one of Yeager's strongest sections.
+
+Make it feel like an actual enterprise architecture diagram.
+
+The current flow is essentially:
+
+Ingest
+→ Embed
+→ Retrieve
+→ Respond
+
+Preserve this conceptual flow.
+
+Make the visualization more impressive with:
+
+* connected nodes
+* data flow animation
+* subtle grid
+* status indicators
+* source/database representations
+* retrieval/reranking visualization
+* security boundaries
+* model layer
+* tool/action layer
+
+However:
+
+DO NOT imply infrastructure that does not actually exist.
+
+This is a visual explanation of Yeager's engineering approach.
+
+---
+
+# SECURITY SECTION
+
+This section should look extremely trustworthy.
+
+Make security visually comparable to enterprise SaaS documentation.
+
+Highlight concepts such as:
+
+Encryption
+RBAC
+Audit trails
+Data isolation
+Private deployment
+VPC / on-premise options
+Configurable retention
+Human escalation
+
+Use restrained green/emerald accents.
+
+Avoid fake compliance badges.
+
+DO NOT claim:
+
+SOC 2
+ISO 27001
+HIPAA
+GDPR certification
+PCI compliance
+
+unless those claims already exist in the source HTML.
+
+Never invent certifications.
+
+---
+
+# METRICS / VALUE SECTION
+
+Improve the current “Pilot / Trace / Guard / Ship” section.
+
+Make it feel like a strategic operating model rather than generic statistics.
+
+Use typography and layout to communicate:
+
+Pilot
+Trace
+Guard
+Ship
+
+These are concepts, not fake numerical achievements.
+
+Do NOT invent:
+
+* number of clients
+* revenue
+* uptime
+* users
+* deployments
+* performance percentages
+* years of experience
+
+unless they already exist in the HTML.
+
+---
+
+# FOUNDER SECTION
+
+Keep the existing founder information.
+
+Make the founder section feel more credible and professional.
+
+It should communicate:
+
+Founder
+Technical leadership
+Architecture
+Engineering
+AI systems
+
+Use a premium profile layout.
+
+Keep existing LinkedIn/GitHub links functional.
+
+Do not invent credentials, companies, awards or experience.
+
+---
+
+# PROJECT / CONTACT FORM
+
+THIS IS CRITICAL.
+
+The existing project submission form must continue working exactly as it currently works.
+
+Improve ONLY:
+
+* visual design
+* field grouping
+* typography
+* spacing
+* focus states
+* validation presentation
+* button design
+* success state presentation
+* mobile layout
+
+DO NOT change:
+
+* IDs
+* API endpoint
+* payload
+* JavaScript logic
+* backend integration
+* MongoDB behavior
+
+The user should feel like they are submitting an enterprise AI project brief, not filling out a generic contact form.
+
+Make it feel like:
+
+“Tell us what you're building.”
+
+with structured project information.
+
+Preserve the existing project type selection and fields.
+
+---
+
+# CHATBOT
+
+The existing Yeager chatbot must remain functional.
+
+Do not remove it.
+
+Redesign it into a premium AI assistant interface.
+
+Make it feel like:
+
+“Yeager AI Assistant”
+
+rather than a generic floating chatbot.
+
+Improve:
+
+* launcher
+* window
+* message bubbles
+* quick questions
+* typing indicator
+* input area
+* logo
+* spacing
+* responsiveness
+* animation
+
+Preserve the existing chatbot JavaScript and response behavior.
+
+Do not replace its logic with an external API.
+
+---
+
+# MICRO-INTERACTIONS
+
+Add high-quality subtle interactions.
+
+Examples:
+
+* Cards gently rise on hover
+* Borders illuminate subtly
+* Buttons have controlled hover movement
+* Architecture nodes have flowing indicators
+* Section reveals are smooth
+* Navbar reacts to scrolling
+* CTA arrows move slightly
+* Inputs have premium focus states
+* Trust indicators have subtle motion
+* Background lighting slowly moves
+
+Avoid excessive animation.
+
+The rule:
+
+**Motion should communicate state, hierarchy or interaction — never exist merely for decoration.**
+
+---
+
+# BACKGROUND
+
+Create a sophisticated technical background.
+
+Use:
+
+* subtle grid
+* radial lighting
+* extremely subtle noise
+* blurred light fields
+* thin technical lines
+* controlled gradients
+
+Avoid:
+
+* giant glowing blobs
+* excessive neon
+* distracting particles
+* animated stars
+* cyberpunk effects
+
+The background should disappear into the interface rather than compete with it.
+
+---
+
+# TYPOGRAPHY
+
+Use the existing font system where possible.
+
+Create a strong typography hierarchy:
+
+Display headline
+↓
+Supporting statement
+↓
+Section title
+↓
+Card title
+↓
+Body
+↓
+Technical metadata
+
+Use monospace only for technical metadata, system status, labels and architecture information.
+
+Do NOT make normal paragraphs monospace.
+
+---
+
+# RESPONSIVE DESIGN
+
+The redesign must work extremely well on:
+
+* 1440px+
+* 1280px
+* 1024px
+* 768px
+* 480px
+* 390px
+* 360px
+
+Do not simply shrink desktop.
+
+Redesign layouts appropriately for mobile.
+
+Pay special attention to:
+
+* hero
+* navbar
+* cards
+* architecture visualization
+* contact/project form
+* chatbot
+* founder section
+* buttons
+* text wrapping
+
+No horizontal overflow.
+
+---
+
+# ACCESSIBILITY
+
+Improve frontend accessibility without breaking functionality.
+
+Ensure:
+
+* keyboard navigation
+* visible focus states
+* semantic headings
+* accessible buttons
+* useful aria-labels
+* sufficient contrast
+* reduced-motion support
+
+Preserve the existing `prefers-reduced-motion` behavior.
+
+---
+
+# PERFORMANCE
+
+Do not introduce huge libraries.
+
+Prefer:
+
+* CSS
+* existing JavaScript
+* inline SVG
+* lightweight DOM interactions
+
+Do not add React, Vue, Three.js, GSAP, Framer Motion or other frameworks.
+
+Do not introduce unnecessary dependencies.
+
+Keep the page fast.
+
+---
+
+# IMPORTANT: EXISTING CODE PRESERVATION
+
+Before editing:
+
+1. Read the ENTIRE HTML file.
+2. Identify all JavaScript functionality.
+3. Identify all DOM IDs referenced by JavaScript.
+4. Identify all backend/API calls.
+5. Identify all form fields and their IDs.
+6. Identify all event listeners.
+7. Identify all existing navigation anchors.
+8. Identify all existing chatbot elements.
+9. Identify all project submission elements.
+
+Then redesign the presentation around them.
+
+NEVER delete functionality simply because it is inconvenient to redesign.
+
+If you need to change HTML structure, preserve all required IDs/classes/data attributes used by JavaScript.
+
+---
+
+# DO NOT DO THESE THINGS
+
+DO NOT:
+
+* rewrite the backend
+* modify MongoDB
+* modify API endpoints
+* change request payloads
+* remove working JavaScript
+* replace working forms
+* add fake data
+* add fake customers
+* add fake testimonials
+* add fake statistics
+* add fake certifications
+* invent enterprise clients
+* invent partnerships
+* invent security certifications
+* create fake API responses
+* add unnecessary libraries
+* turn the site into a dashboard
+* turn it into a cyberpunk website
+* overuse gradients
+* overuse animations
+* destroy mobile responsiveness
+
+---
+
+# CONTENT RULE
+
+You may improve wording ONLY when the existing wording is clearly weak or repetitive.
+
+Preserve the factual meaning of the existing content.
+
+Do not invent business claims.
+
+Yeager should be positioned as a serious AI engineering / automation company.
+
+The visual message should be:
+
+**“We engineer AI systems that can actually operate inside a business.”**
+
+not:
+
+**“Look how cool our AI website is.”**
+
+---
+
+# FINAL QUALITY BAR
+
+After editing, review the entire page as if you are:
+
+1. A CTO evaluating Yeager
+2. A startup founder looking for an AI engineering partner
+3. An enterprise buyer concerned about security
+4. A developer evaluating technical credibility
+5. A designer judging the visual quality
+
+The result should feel like a company that could confidently sell an enterprise AI implementation.
+
+Before finishing, verify:
+
+* All existing JavaScript still works.
+* All existing IDs required by JS still exist.
+* `/api/book-demo` remains unchanged.
+* Form submission remains unchanged.
+* MongoDB integration is untouched.
+* Chatbot remains functional.
+* Hero demo remains functional.
+* Navigation remains functional.
+* Mobile layout works.
+* No console errors are introduced.
+* No backend files were modified.
+* No database files were modified.
+
+## OUTPUT
+
+Modify the existing HTML file directly.
+
+Do not create a new framework.
+
+Do not create a new project.
+
+Do not touch backend files.
+
+Do not touch MongoDB.
+
+Only improve the frontend HTML/CSS and safe frontend presentation behavior.
+
+The final result should be a **premium, enterprise-grade Yeager website** that looks substantially more polished, credible and commercially ready than the current version.
