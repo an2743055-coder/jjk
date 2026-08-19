@@ -71,8 +71,8 @@ input, textarea, select { font-family: inherit; }
 .bg-grid {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
@@ -89,16 +89,16 @@ input, textarea, select { font-family: inherit; }
   pointer-events: none; z-index: 0; opacity: 0.09;
   animation: drift 28s ease-in-out infinite alternate;
 }
-.orb--blue { width: 700px; height: 700px; background: #00d4ff; top: -250px; right: -200px; }
-.orb--purple { width: 500px; height: 500px; background: #a0b0c8; top: 38%; left: -220px; animation-delay: -10s; opacity: 0.06; }
-.orb--emerald { width: 480px; height: 480px; background: #10d9a0; bottom: -180px; right: 18%; animation-delay: -18s; opacity: 0.06; }
+.orb--blue { width: 700px; height: 700px; background: #000000; top: -250px; right: -200px; opacity: 0.02; }
+.orb--purple { width: 500px; height: 500px; background: #000000; top: 38%; left: -220px; animation-delay: -10s; opacity: 0.02; }
+.orb--emerald { width: 480px; height: 480px; background: #000000; bottom: -180px; right: 18%; animation-delay: -18s; opacity: 0.02; }
 @keyframes drift {
   0% { transform: translate(0,0) scale(1); }
   100% { transform: translate(60px, -40px) scale(1.1); }
 }
 .noise {
   position: fixed; inset: 0; pointer-events: none; z-index: 1;
-  opacity: 0.025; mix-blend-mode: overlay;
+  opacity: 0; mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
 }
 
@@ -1298,27 +1298,24 @@ section { padding: 8rem 0; position: relative; z-index: 2; }
 }
 
 body {
-  background:
-    radial-gradient(circle at 10% 0%, rgba(13, 148, 136, 0.07), transparent 32rem),
-    radial-gradient(circle at 90% 10%, rgba(15, 118, 110, 0.05), transparent 30rem),
-    linear-gradient(180deg, #ffffff 0%, #f5f7fa 55%, #f7f9fb 100%);
+  background: #000000;
   color: var(--text-primary);
 }
 
 .bg-grid {
   background-image:
-    linear-gradient(rgba(15, 23, 42, 0.026) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(15, 23, 42, 0.026) 1px, transparent 1px);
-  opacity: 0.5;
+    linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+  opacity: 0.15;
   mask-image: linear-gradient(180deg, black, transparent 80%);
   -webkit-mask-image: linear-gradient(180deg, black, transparent 80%);
 }
-.bg-grid::after { background: linear-gradient(180deg, transparent 0%, rgba(245,247,250,0.92) 70%, #f7f9fb 100%); }
-.noise { opacity: 0.01; mix-blend-mode: multiply; }
-.orb { filter: blur(110px); opacity: 0.1; }
-.orb--blue { background: #0d9488; }
-.orb--purple { background: #0f766e; opacity: 0.08; }
-.orb--emerald { background: #14b8a6; opacity: 0.08; }
+.bg-grid::after { background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.92) 70%, #000000 100%); }
+.noise { opacity: 0; mix-blend-mode: multiply; }
+.orb { filter: blur(110px); opacity: 0.02; }
+.orb--blue { background: #000000; }
+.orb--purple { background: #000000; opacity: 0.02; }
+.orb--emerald { background: #000000; opacity: 0.02; }
 
 .scroll-progress {
   background: linear-gradient(90deg, #0d9488, #0f766e);
