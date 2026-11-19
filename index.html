@@ -1702,6 +1702,20 @@ h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; font-weight: 700; letter-spa
 /* ---------- forms: project request and demo booking ---------- */
 .projects__container, .contact__container { border-radius: 28px; box-shadow: var(--pop-lg); }
 .contact__container { background: var(--pink-soft); }
+/* her second, smaller appearance: a round sticker peeking over the corner of the booking card.
+   Delete this rule and the media query below it to go back to a single picture. */
+.contact__container { overflow: visible; }
+.contact__container::after {
+  content: ''; position: absolute; top: -4.4rem; right: 2.5rem; z-index: 1;
+  width: 6.75rem; aspect-ratio: 1; border-radius: 50%;
+  background: var(--girl) 45% 33% / 170% auto no-repeat var(--pink);
+  border: var(--line); box-shadow: 5px 5px 0 var(--ink);
+  transform: rotate(-6deg);
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .contact__container::after { top: -2.9rem; right: 1.1rem; width: 5rem; box-shadow: 4px 4px 0 var(--ink); }
+}
 .projects__title, .contact__title { font-weight: 800; }
 .projects__desc, .contact__desc { color: var(--ink-soft); }
 
